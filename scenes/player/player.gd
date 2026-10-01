@@ -18,6 +18,8 @@ var _wheel_front: RigidBody2D
 var _wheel_back: RigidBody2D
 
 var _initial_transform: Transform2D
+var _initial_wheel_front_transform: Transform2D
+var _initial_wheel_back_transform: Transform2D
 
 # Held state of each control, updated from InputHandler signals.
 var _right_held := false
@@ -31,6 +33,8 @@ func _ready() -> void:
 	_wheel_front = pin_joint_front.get_node(pin_joint_front.node_b)
 	_wheel_back = pin_joint_back.get_node(pin_joint_back.node_b)
 	_initial_transform = global_transform
+	_initial_wheel_front_transform = _wheel_front.global_transform
+	_initial_wheel_back_transform = _wheel_back.global_transform
 
 	# Connections to this node's methods are removed automatically when it's freed.
 	InputHandler.move_right_just_pressed.connect(_on_move_right_just_pressed)
@@ -86,11 +90,13 @@ static func _drive_wheel(wheel: RigidBody2D, throttle: float, torque: float, top
 
 
 func _reset_position() -> void:
-	global_transform = _initial_transform
 	linear_velocity = Vector2.ZERO
 	angular_velocity = 0.0
 	_wheel_front.linear_velocity = Vector2.ZERO
 	_wheel_front.angular_velocity = 0.0
 	_wheel_back.linear_velocity = Vector2.ZERO
 	_wheel_back.angular_velocity = 0.0
+	global_transform = _initial_transform
+	_wheel_front.global_transform = _initial_wheel_front_transform
+	_wheel_back.global_transform = _initial_wheel_back_transform
 	GameState.reset()
