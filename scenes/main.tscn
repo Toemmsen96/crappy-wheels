@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://br5w05nhpmv3b"]
+
+[ext_resource type="PackedScene" uid="uid://do1e4ur38dax6" path="res://scenes/player.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://bienrmgk5enee" path="res://scenes/parallax.tscn" id="1_sugp2"]
+[ext_resource type="PackedScene" uid="uid://dypaldbflwpxw" path="res://scenes/map/level_1.tscn" id="2_level"]
+
+[node name="Main" type="Node2D" unique_id=250274408]
+
+[node name="Parallax" parent="." unique_id=78725977 instance=ExtResource("1_sugp2")]
+
+[node name="Player" parent="." unique_id=1873040083 instance=ExtResource("1_o5qli")]
+position = Vector2(63, 209)
+
+[node name="Level1" parent="." unique_id=1530417245 instance=ExtResource("2_level")]
+position = Vector2(94, 225)

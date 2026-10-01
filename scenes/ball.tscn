@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://50ysot82vjo2"]
+
+[ext_resource type="Texture2D" uid="uid://dqsv0wjb8rbh1" path="res://assets/ball.png" id="1_7s4qf"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kuy6b"]
+radius = 19.31
+
+[node name="Ball" type="StaticBody2D" unique_id=209647378]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=78616403]
+shape = SubResource("CircleShape2D_kuy6b")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=744801352]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_7s4qf")
+expand_mode = 2

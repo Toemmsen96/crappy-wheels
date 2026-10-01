@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://bienrmgk5enee"]
+
+[ext_resource type="Texture2D" uid="uid://yamadlndlon4" path="res://assets/clouds.png" id="1_x4emh"]
+[ext_resource type="Texture2D" uid="uid://cog38oeaos4ir" path="res://assets/montagne.png" id="2_m2aw8"]
+
+[node name="Parallax" type="Node2D" unique_id=78725977]
+
+[node name="Sky" type="Parallax2D" parent="." unique_id=1940034944]
+scroll_scale = Vector2(0, 0)
+
+[node name="ColorRect" type="ColorRect" parent="Sky" unique_id=687649444]
+custom_minimum_size = Vector2(1920, 1080)
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.08612115, 0.35106915, 0.5519592, 1)
+
+[node name="Clouds" type="Parallax2D" parent="." unique_id=1669934915]
+scroll_scale = Vector2(0.9, 0.9)
+repeat_size = Vector2(1152, 0)
+repeat_times = 2
+
+[node name="TextureRect" type="TextureRect" parent="Clouds" unique_id=561038827]
+custom_minimum_size = Vector2(1152, 648)
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_x4emh")
+expand_mode = 2
+
+[node name="Mountains" type="Parallax2D" parent="." unique_id=22249826]
+repeat_size = Vector2(1152, 0)
+repeat_times = 2
+
+[node name="TextureRect" type="TextureRect" parent="Mountains" unique_id=1091244793]
+custom_minimum_size = Vector2(1152, 648)
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_m2aw8")
+expand_mode = 2

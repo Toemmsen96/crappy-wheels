@@ -1,0 +1,126 @@
+[gd_scene format=3 uid="uid://dypaldbflwpxw"]
+
+[ext_resource type="PackedScene" uid="uid://brmr846fy238o" path="res://scenes/map/floortile.tscn" id="1_tile"]
+[ext_resource type="PackedScene" uid="uid://50ysot82vjo2" path="res://scenes/ball.tscn" id="2_ball"]
+
+[node name="Level1" type="Node2D" unique_id=705425564]
+
+[node name="Ground" type="Node2D" parent="." unique_id=333946139]
+
+[node name="Start1" parent="Ground" unique_id=857876999 instance=ExtResource("1_tile")]
+position = Vector2(-90, -23.5)
+rotation = 1.5708
+scale = Vector2(3.7, 1)
+
+[node name="Start2" parent="Ground" unique_id=1407871144 instance=ExtResource("1_tile")]
+position = Vector2(60, 23)
+scale = Vector2(14.05, 1)
+
+[node name="Descent" parent="Ground" unique_id=113694312 instance=ExtResource("1_tile")]
+position = Vector2(336.7266, 70.9491)
+rotation = 0.3335
+scale = Vector2(14.8663, 1)
+
+[node name="Bumps" parent="Ground" unique_id=165555737 instance=ExtResource("1_tile")]
+position = Vector2(620, 120)
+scale = Vector2(14.05, 1)
+
+[node name="Kicker" parent="Ground" unique_id=1773673106 instance=ExtResource("1_tile")]
+position = Vector2(823.8462, 94.2308)
+rotation = -0.3948
+scale = Vector2(6.55, 1)
+
+[node name="PitLeftWall" parent="Ground" unique_id=1160797845 instance=ExtResource("1_tile")]
+position = Vector2(870, 145)
+rotation = 1.5708
+scale = Vector2(7.55, 1)
+
+[node name="PitFloor" parent="Ground" unique_id=212142728 instance=ExtResource("1_tile")]
+position = Vector2(920, 230)
+scale = Vector2(4.05, 1)
+
+[node name="PitRightWall" parent="Ground" unique_id=795310972 instance=ExtResource("1_tile")]
+position = Vector2(970, 160)
+rotation = -1.5708
+scale = Vector2(6.05, 1)
+
+[node name="Landing" parent="Ground" unique_id=1261527726 instance=ExtResource("1_tile")]
+position = Vector2(1057.1265, 139.5783)
+rotation = 0.2915
+scale = Vector2(10.4903, 1)
+
+[node name="BigBallStraight" parent="Ground" unique_id=134551738 instance=ExtResource("1_tile")]
+position = Vector2(1330, 170)
+scale = Vector2(17.05, 1)
+
+[node name="Climb1" parent="Ground" unique_id=1963574602 instance=ExtResource("1_tile")]
+position = Vector2(1603.7139, 129.2848)
+rotation = -0.3805
+scale = Vector2(10.8203, 1)
+
+[node name="Climb2" parent="Ground" unique_id=1099709946 instance=ExtResource("1_tile")]
+position = Vector2(1750, 90)
+scale = Vector2(5.05, 1)
+
+[node name="Finish1" parent="Ground" unique_id=471060838 instance=ExtResource("1_tile")]
+position = Vector2(2132.5, 190)
+scale = Vector2(16.8, 1)
+
+[node name="Finish2" parent="Ground" unique_id=90521324 instance=ExtResource("1_tile")]
+position = Vector2(2310, 140)
+rotation = -1.5708
+scale = Vector2(4.05, 1)
+
+[node name="Balls" type="Node2D" parent="." unique_id=194570285]
+
+[node name="Bump1" parent="Balls" unique_id=941247021 instance=ExtResource("2_ball")]
+position = Vector2(540, 112)
+scale = Vector2(0.4, 0.4)
+
+[node name="Bump2" parent="Balls" unique_id=908017869 instance=ExtResource("2_ball")]
+position = Vector2(600, 112)
+scale = Vector2(0.4, 0.4)
+
+[node name="Bump3" parent="Balls" unique_id=160013383 instance=ExtResource("2_ball")]
+position = Vector2(660, 112)
+scale = Vector2(0.4, 0.4)
+
+[node name="Bump4" parent="Balls" unique_id=526819858 instance=ExtResource("2_ball")]
+position = Vector2(720, 112)
+scale = Vector2(0.4, 0.4)
+
+[node name="PitBall1" parent="Balls" unique_id=204804716 instance=ExtResource("2_ball")]
+position = Vector2(892, 208)
+scale = Vector2(0.6, 0.6)
+
+[node name="PitBall2" parent="Balls" unique_id=1193364967 instance=ExtResource("2_ball")]
+position = Vector2(920, 208)
+scale = Vector2(0.6, 0.6)
+
+[node name="PitBall3" parent="Balls" unique_id=921648019 instance=ExtResource("2_ball")]
+position = Vector2(948, 208)
+scale = Vector2(0.6, 0.6)
+
+[node name="PitBall4" parent="Balls" unique_id=136938843 instance=ExtResource("2_ball")]
+position = Vector2(906, 186)
+scale = Vector2(0.6, 0.6)
+
+[node name="PitBall5" parent="Balls" unique_id=1785651415 instance=ExtResource("2_ball")]
+position = Vector2(934, 186)
+scale = Vector2(0.6, 0.6)
+
+[node name="Boulder" parent="Balls" unique_id=1224302567 instance=ExtResource("2_ball")]
+position = Vector2(1330, 172)
+scale = Vector2(1.2, 1.2)
+
+[node name="Step1" parent="Balls" unique_id=275862673 instance=ExtResource("2_ball")]
+position = Vector2(1825, 100)
+
+[node name="Step2" parent="Balls" unique_id=489402028 instance=ExtResource("2_ball")]
+position = Vector2(1865, 120)
+
+[node name="Step3" parent="Balls" unique_id=1364258844 instance=ExtResource("2_ball")]
+position = Vector2(1905, 140)
+
+[node name="Step4" parent="Balls" unique_id=1357402586 instance=ExtResource("2_ball")]
+position = Vector2(1945, 160)
