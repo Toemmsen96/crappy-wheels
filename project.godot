@@ -13,7 +13,8 @@ config_version=5
 config/name="CrappyWheels"
 run/main_scene="uid://br5w05nhpmv3b"
 config/features=PackedStringArray("4.7", "GL Compatibility")
-config/icon="res://icon.svg"
+boot_splash/bg_color=Color(0.1144912, 0.13806194, 0.21075785, 1)
+config/icon="uid://bd7p0xfr13ydv"
 
 [autoload]
 
@@ -24,6 +25,10 @@ InputHandler="*res://scripts/input_handler.gd"
 
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep_width"
+
+[dotnet]
+
+project/assembly_name="CrappyWheels"
 
 [input]
 

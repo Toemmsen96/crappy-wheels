@@ -15,7 +15,7 @@ offset_bottom = 1080.0
 color = Color(0.08612115, 0.35106915, 0.5519592, 1)
 
 [node name="Clouds" type="Parallax2D" parent="." unique_id=1669934915]
-scroll_scale = Vector2(0.9, 0.9)
+scroll_scale = Vector2(0.5, 0.5)
 repeat_size = Vector2(1152, 0)
 repeat_times = 2
 
@@ -27,6 +27,7 @@ texture = ExtResource("1_x4emh")
 expand_mode = 2
 
 [node name="Mountains" type="Parallax2D" parent="." unique_id=22249826]
+scroll_scale = Vector2(0.7, 0.7)
 repeat_size = Vector2(1152, 0)
 repeat_times = 2
 

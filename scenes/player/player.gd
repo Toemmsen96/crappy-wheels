@@ -93,3 +93,4 @@ func _reset_position() -> void:
 	_wheel_front.angular_velocity = 0.0
 	_wheel_back.linear_velocity = Vector2.ZERO
 	_wheel_back.angular_velocity = 0.0
+	GameState.reset()

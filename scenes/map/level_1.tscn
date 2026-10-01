@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://brmr846fy238o" path="res://scenes/map/floortile.tscn" id="1_tile"]
 [ext_resource type="PackedScene" uid="uid://50ysot82vjo2" path="res://scenes/ball.tscn" id="2_ball"]
+[ext_resource type="PackedScene" uid="uid://307acvq3fkfa" path="res://scenes/finish.tscn" id="3_fmjld"]
 
 [node name="Level1" type="Node2D" unique_id=705425564]
 
@@ -124,3 +125,6 @@ position = Vector2(1905, 140)
 
 [node name="Step4" parent="Balls" unique_id=1357402586 instance=ExtResource("2_ball")]
 position = Vector2(1945, 160)
+
+[node name="Finish" parent="." unique_id=1487630266 instance=ExtResource("3_fmjld")]
+position = Vector2(2241, 167)

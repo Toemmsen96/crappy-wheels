@@ -4,3 +4,5 @@
 
 # Web export output
 /build/
+
+.vscode/

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://r26cyvaur4ro" path="res://scenes/player/player.gd" id="1_3vyb7"]
 [ext_resource type="Texture2D" uid="uid://c8dlwfrdskukc" path="res://assets/carbody.png" id="2_g2els"]
 [ext_resource type="Texture2D" uid="uid://cflpq3daw5joa" path="res://assets/wheel.png" id="3_qhqgy"]
+[ext_resource type="PackedScene" uid="uid://66dumd072w4u" path="res://scenes/ui.tscn" id="4_dqkch"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kuy6b"]
 
@@ -100,3 +101,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_g2els")
 expand_mode = 2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1736938699]
+
+[node name="UI" parent="CanvasLayer" unique_id=219391505 instance=ExtResource("4_dqkch")]
