@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://dej164hf3kk06"]
+
+[ext_resource type="Script" uid="uid://duhuv7frhnb34" path="res://scenes/main_menu.gd" id="1_ekxnf"]
+[ext_resource type="PackedScene" uid="uid://ba8r6mcb1j0ma" path="res://scenes/ui/level_selector.tscn" id="2_bqqt6"]
+
+[node name="MainMenu" type="CanvasLayer" unique_id=86299285]
+script = ExtResource("1_ekxnf")
+level_select_scene = ExtResource("2_bqqt6")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1432442592]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=57630282]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=304515173]
+layout_mode = 2
+theme_override_font_sizes/font_size = 83
+text = "Crappy Wheels"
+
+[node name="Play" type="Button" parent="MarginContainer/VBoxContainer" unique_id=2087037737]
+layout_mode = 2
+text = "Play"
+
+[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer" unique_id=1591248503]
+layout_mode = 2
+text = "Level Builder"
+
+[node name="Button3" type="Button" parent="MarginContainer/VBoxContainer" unique_id=1931201330]
+layout_mode = 2
+disabled = true
+text = "Settings"
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer" unique_id=811517621]
+layout_mode = 2
+disabled = true
+text = "Leaderboards"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Play" to="." method="_on_PlayButton_pressed"]

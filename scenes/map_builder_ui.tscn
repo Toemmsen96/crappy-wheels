@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://rk4pcxlesv1r"]
+
+[ext_resource type="Script" uid="uid://b6x6m1xf45xsh" path="res://scripts/map_builder_ui.gd" id="1_u1570"]
+
+[node name="MapBuilderUI" type="CanvasLayer" unique_id=168726743]
+script = ExtResource("1_u1570")
