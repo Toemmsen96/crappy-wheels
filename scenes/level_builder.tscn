@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/level_builder.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://bienrmgk5enee" path="res://scenes/parallax.tscn" id="2_parallax"]
+[ext_resource type="PackedScene" uid="uid://rk4pcxlesv1r" path="res://scenes/map_builder_ui.tscn" id="3_ui"]
+[ext_resource type="Texture2D" uid="uid://c8dlwfrdskukc" path="res://assets/carbody.png" id="4_carbody"]
+
+[node name="LevelBuilder" type="Node2D" node_paths=PackedStringArray("ui", "camera", "objects_root", "start_marker", "overlay")]
+script = ExtResource("1_script")
+ui = NodePath("MapBuilderUI")
+camera = NodePath("Camera2D")
+objects_root = NodePath("Objects")
+start_marker = NodePath("StartMarker")
+overlay = NodePath("Overlay")
+
+[node name="Parallax" parent="." instance=ExtResource("2_parallax")]
+z_index = -100
+
+[node name="Objects" type="Node2D" parent="."]
+
+[node name="StartMarker" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.75)
+scale = Vector2(0.15748, 0.15748)
+texture = ExtResource("4_carbody")
+
+[node name="Overlay" type="Node2D" parent="."]
+z_index = 10
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="MapBuilderUI" parent="." instance=ExtResource("3_ui")]

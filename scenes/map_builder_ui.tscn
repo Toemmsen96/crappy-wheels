@@ -2,5 +2,129 @@
 
 [ext_resource type="Script" uid="uid://b6x6m1xf45xsh" path="res://scripts/map_builder_ui.gd" id="1_u1570"]
 
-[node name="MapBuilderUI" type="CanvasLayer" unique_id=168726743]
+[sub_resource type="ButtonGroup" id="ButtonGroup_tools"]
+
+[node name="MapBuilderUI" type="CanvasLayer" unique_id=168726743 node_paths=PackedStringArray("floor_button", "ball_button", "start_button", "finish_button", "erase_button", "ball_size_input", "snap_check", "name_edit", "save_button", "test_button", "back_button", "status_label", "hint_label")]
 script = ExtResource("1_u1570")
+floor_button = NodePath("TopBar/Margin/Rows/Tools/FloorButton")
+ball_button = NodePath("TopBar/Margin/Rows/Tools/BallButton")
+start_button = NodePath("TopBar/Margin/Rows/Tools/StartButton")
+finish_button = NodePath("TopBar/Margin/Rows/Tools/FinishButton")
+erase_button = NodePath("TopBar/Margin/Rows/Tools/EraseButton")
+ball_size_input = NodePath("TopBar/Margin/Rows/Tools/BallSize")
+snap_check = NodePath("TopBar/Margin/Rows/Tools/SnapCheck")
+name_edit = NodePath("TopBar/Margin/Rows/Actions/NameEdit")
+save_button = NodePath("TopBar/Margin/Rows/Actions/SaveButton")
+test_button = NodePath("TopBar/Margin/Rows/Actions/TestButton")
+back_button = NodePath("TopBar/Margin/Rows/Actions/BackButton")
+status_label = NodePath("Bottom/StatusLabel")
+hint_label = NodePath("Bottom/HintLabel")
+
+[node name="TopBar" type="PanelContainer" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="Margin" type="MarginContainer" parent="TopBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Rows" type="VBoxContainer" parent="TopBar/Margin"]
+layout_mode = 2
+
+[node name="Tools" type="HBoxContainer" parent="TopBar/Margin/Rows"]
+layout_mode = 2
+
+[node name="FloorButton" type="Button" parent="TopBar/Margin/Rows/Tools"]
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_tools")
+text = "Floor"
+
+[node name="BallButton" type="Button" parent="TopBar/Margin/Rows/Tools"]
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_tools")
+text = "Ball"
+
+[node name="StartButton" type="Button" parent="TopBar/Margin/Rows/Tools"]
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_tools")
+text = "Start"
+
+[node name="FinishButton" type="Button" parent="TopBar/Margin/Rows/Tools"]
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_tools")
+text = "Finish"
+
+[node name="EraseButton" type="Button" parent="TopBar/Margin/Rows/Tools"]
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_tools")
+text = "Erase"
+
+[node name="Separator" type="VSeparator" parent="TopBar/Margin/Rows/Tools"]
+layout_mode = 2
+
+[node name="BallSizeLabel" type="Label" parent="TopBar/Margin/Rows/Tools"]
+layout_mode = 2
+text = "Ball size"
+
+[node name="BallSize" type="SpinBox" parent="TopBar/Margin/Rows/Tools"]
+layout_mode = 2
+min_value = 0.1
+max_value = 10.0
+step = 0.1
+value = 1.0
+
+[node name="SnapCheck" type="CheckBox" parent="TopBar/Margin/Rows/Tools"]
+layout_mode = 2
+button_pressed = true
+text = "Snap to grid"
+
+[node name="Actions" type="HBoxContainer" parent="TopBar/Margin/Rows"]
+layout_mode = 2
+
+[node name="NameEdit" type="LineEdit" parent="TopBar/Margin/Rows/Actions"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Level name"
+
+[node name="SaveButton" type="Button" parent="TopBar/Margin/Rows/Actions"]
+layout_mode = 2
+text = "Save"
+
+[node name="TestButton" type="Button" parent="TopBar/Margin/Rows/Actions"]
+layout_mode = 2
+text = "Test"
+
+[node name="BackButton" type="Button" parent="TopBar/Margin/Rows/Actions"]
+layout_mode = 2
+text = "Back"
+
+[node name="Bottom" type="VBoxContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -12.0
+offset_bottom = -12.0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="StatusLabel" type="Label" parent="Bottom"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+
+[node name="HintLabel" type="Label" parent="Bottom"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4

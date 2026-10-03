@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d4k22chkbkdl3" path="res://scenes/ui/ui.gd" id="1_nt7q6"]
 
-[node name="UI" type="Control" unique_id=219391505 node_paths=PackedStringArray("time_label")]
+[node name="HUD" type="Control" unique_id=219391505 node_paths=PackedStringArray("time_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

@@ -45,3 +45,4 @@ disabled = true
 text = "Leaderboards"
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Play" to="." method="_on_PlayButton_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Button2" to="." method="_on_LevelBuilderButton_pressed"]

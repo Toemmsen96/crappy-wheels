@@ -4,6 +4,10 @@ var time_elapsed := 0.0
 # You don't really need this
 var counter = 1
 var is_stopped := false
+## Builder level to edit or play. The builder starts a new level when this is null.
+var current_level: LevelData = null
+## Whether current_level is being test-played from the level builder.
+var testing_in_builder := false
 
 
 # Called when the node enters the scene tree for the first time.
