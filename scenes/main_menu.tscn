@@ -2,10 +2,13 @@
 
 [ext_resource type="Script" uid="uid://duhuv7frhnb34" path="res://scenes/main_menu.gd" id="1_ekxnf"]
 [ext_resource type="PackedScene" uid="uid://ba8r6mcb1j0ma" path="res://scenes/ui/level_selector.tscn" id="2_bqqt6"]
+[ext_resource type="PackedScene" uid="uid://bienrmgk5enee" path="res://scenes/parallax.tscn" id="3_bqqt6"]
 
 [node name="MainMenu" type="CanvasLayer" unique_id=86299285]
 script = ExtResource("1_ekxnf")
 level_select_scene = ExtResource("2_bqqt6")
+
+[node name="Parallax" parent="." unique_id=78725977 instance=ExtResource("3_bqqt6")]
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1432442592]
 anchors_preset = 15
@@ -20,11 +23,13 @@ theme_override_constants/margin_bottom = 25
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=57630282]
 layout_mode = 2
+alignment = 2
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=304515173]
 layout_mode = 2
 theme_override_font_sizes/font_size = 83
 text = "Crappy Wheels"
+horizontal_alignment = 1
 
 [node name="Play" type="Button" parent="MarginContainer/VBoxContainer" unique_id=2087037737]
 layout_mode = 2

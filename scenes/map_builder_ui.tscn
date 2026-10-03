@@ -4,10 +4,12 @@
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_tools"]
 
-[node name="MapBuilderUI" type="CanvasLayer" unique_id=168726743 node_paths=PackedStringArray("floor_button", "ball_button", "start_button", "finish_button", "erase_button", "ball_size_input", "snap_check", "name_edit", "save_button", "test_button", "back_button", "status_label", "hint_label")]
+[node name="MapBuilderUI" type="CanvasLayer" unique_id=168726743 node_paths=PackedStringArray("select_button", "floor_button", "ball_button", "boost_button", "start_button", "finish_button", "erase_button", "ball_size_input", "snap_check", "name_edit", "save_button", "test_button", "back_button", "status_label", "hint_label", "selection_row", "selection_label", "rotation_label", "rotation_input", "size_label", "size_input", "rotation_slider", "size_slider", "collision_check", "strength_label", "strength_input", "strength_slider")]
 script = ExtResource("1_u1570")
+select_button = NodePath("TopBar/Margin/Rows/Tools/SelectButton")
 floor_button = NodePath("TopBar/Margin/Rows/Tools/FloorButton")
 ball_button = NodePath("TopBar/Margin/Rows/Tools/BallButton")
+boost_button = NodePath("TopBar/Margin/Rows/Tools/BoostButton")
 start_button = NodePath("TopBar/Margin/Rows/Tools/StartButton")
 finish_button = NodePath("TopBar/Margin/Rows/Tools/FinishButton")
 erase_button = NodePath("TopBar/Margin/Rows/Tools/EraseButton")
@@ -19,97 +21,188 @@ test_button = NodePath("TopBar/Margin/Rows/Actions/TestButton")
 back_button = NodePath("TopBar/Margin/Rows/Actions/BackButton")
 status_label = NodePath("Bottom/StatusLabel")
 hint_label = NodePath("Bottom/HintLabel")
+selection_row = NodePath("TopBar/Margin/Rows/Selection")
+selection_label = NodePath("TopBar/Margin/Rows/Selection/SelectionLabel")
+rotation_label = NodePath("TopBar/Margin/Rows/Selection/RotationLabel")
+rotation_input = NodePath("TopBar/Margin/Rows/Selection/RotationInput")
+size_label = NodePath("TopBar/Margin/Rows/Selection/SizeLabel")
+size_input = NodePath("TopBar/Margin/Rows/Selection/SizeInput")
+rotation_slider = NodePath("TopBar/Margin/Rows/Selection/RotationSlider")
+size_slider = NodePath("TopBar/Margin/Rows/Selection/SizeSlider")
+collision_check = NodePath("TopBar/Margin/Rows/Selection/CollisionCheck")
+strength_label = NodePath("TopBar/Margin/Rows/Selection/StrengthLabel")
+strength_input = NodePath("TopBar/Margin/Rows/Selection/StrengthInput")
+strength_slider = NodePath("TopBar/Margin/Rows/Selection/StrengthSlider")
 
-[node name="TopBar" type="PanelContainer" parent="."]
+[node name="TopBar" type="PanelContainer" parent="." unique_id=1256039298]
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
 
-[node name="Margin" type="MarginContainer" parent="TopBar"]
+[node name="Margin" type="MarginContainer" parent="TopBar" unique_id=953753373]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="Rows" type="VBoxContainer" parent="TopBar/Margin"]
+[node name="Rows" type="VBoxContainer" parent="TopBar/Margin" unique_id=1310571991]
 layout_mode = 2
 
-[node name="Tools" type="HBoxContainer" parent="TopBar/Margin/Rows"]
+[node name="Tools" type="HBoxContainer" parent="TopBar/Margin/Rows" unique_id=1161852597]
 layout_mode = 2
 
-[node name="FloorButton" type="Button" parent="TopBar/Margin/Rows/Tools"]
+[node name="SelectButton" type="Button" parent="TopBar/Margin/Rows/Tools" unique_id=534221665]
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_tools")
+text = "Select"
+
+[node name="FloorButton" type="Button" parent="TopBar/Margin/Rows/Tools" unique_id=235162397]
 layout_mode = 2
 toggle_mode = true
 button_pressed = true
 button_group = SubResource("ButtonGroup_tools")
 text = "Floor"
 
-[node name="BallButton" type="Button" parent="TopBar/Margin/Rows/Tools"]
+[node name="BallButton" type="Button" parent="TopBar/Margin/Rows/Tools" unique_id=1086164004]
 layout_mode = 2
 toggle_mode = true
 button_group = SubResource("ButtonGroup_tools")
 text = "Ball"
 
-[node name="StartButton" type="Button" parent="TopBar/Margin/Rows/Tools"]
+[node name="BoostButton" type="Button" parent="TopBar/Margin/Rows/Tools" unique_id=1673959459]
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_tools")
+text = "Boost"
+
+[node name="StartButton" type="Button" parent="TopBar/Margin/Rows/Tools" unique_id=380255421]
 layout_mode = 2
 toggle_mode = true
 button_group = SubResource("ButtonGroup_tools")
 text = "Start"
 
-[node name="FinishButton" type="Button" parent="TopBar/Margin/Rows/Tools"]
+[node name="FinishButton" type="Button" parent="TopBar/Margin/Rows/Tools" unique_id=988496312]
 layout_mode = 2
 toggle_mode = true
 button_group = SubResource("ButtonGroup_tools")
 text = "Finish"
 
-[node name="EraseButton" type="Button" parent="TopBar/Margin/Rows/Tools"]
+[node name="EraseButton" type="Button" parent="TopBar/Margin/Rows/Tools" unique_id=2147188810]
 layout_mode = 2
 toggle_mode = true
 button_group = SubResource("ButtonGroup_tools")
 text = "Erase"
 
-[node name="Separator" type="VSeparator" parent="TopBar/Margin/Rows/Tools"]
+[node name="Separator" type="VSeparator" parent="TopBar/Margin/Rows/Tools" unique_id=180210247]
 layout_mode = 2
 
-[node name="BallSizeLabel" type="Label" parent="TopBar/Margin/Rows/Tools"]
+[node name="BallSizeLabel" type="Label" parent="TopBar/Margin/Rows/Tools" unique_id=1340571153]
 layout_mode = 2
 text = "Ball size"
 
-[node name="BallSize" type="SpinBox" parent="TopBar/Margin/Rows/Tools"]
+[node name="BallSize" type="SpinBox" parent="TopBar/Margin/Rows/Tools" unique_id=1305521746]
 layout_mode = 2
 min_value = 0.1
 max_value = 10.0
 step = 0.1
 value = 1.0
 
-[node name="SnapCheck" type="CheckBox" parent="TopBar/Margin/Rows/Tools"]
+[node name="SnapCheck" type="CheckBox" parent="TopBar/Margin/Rows/Tools" unique_id=2121259806]
 layout_mode = 2
 button_pressed = true
 text = "Snap to grid"
 
-[node name="Actions" type="HBoxContainer" parent="TopBar/Margin/Rows"]
+[node name="Actions" type="HBoxContainer" parent="TopBar/Margin/Rows" unique_id=975365217]
 layout_mode = 2
 
-[node name="NameEdit" type="LineEdit" parent="TopBar/Margin/Rows/Actions"]
+[node name="NameEdit" type="LineEdit" parent="TopBar/Margin/Rows/Actions" unique_id=288272709]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Level name"
 
-[node name="SaveButton" type="Button" parent="TopBar/Margin/Rows/Actions"]
+[node name="SaveButton" type="Button" parent="TopBar/Margin/Rows/Actions" unique_id=1923289760]
 layout_mode = 2
 text = "Save"
 
-[node name="TestButton" type="Button" parent="TopBar/Margin/Rows/Actions"]
+[node name="TestButton" type="Button" parent="TopBar/Margin/Rows/Actions" unique_id=286207709]
 layout_mode = 2
 text = "Test"
 
-[node name="BackButton" type="Button" parent="TopBar/Margin/Rows/Actions"]
+[node name="BackButton" type="Button" parent="TopBar/Margin/Rows/Actions" unique_id=1339655497]
 layout_mode = 2
 text = "Back"
 
-[node name="Bottom" type="VBoxContainer" parent="."]
+[node name="Selection" type="HBoxContainer" parent="TopBar/Margin/Rows" unique_id=667840264]
+visible = false
+layout_mode = 2
+
+[node name="SelectionLabel" type="Label" parent="TopBar/Margin/Rows/Selection" unique_id=1079494263]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Floor"
+
+[node name="RotationLabel" type="Label" parent="TopBar/Margin/Rows/Selection" unique_id=1271380548]
+layout_mode = 2
+text = "Rotation"
+
+[node name="RotationInput" type="SpinBox" parent="TopBar/Margin/Rows/Selection" unique_id=357253908]
+layout_mode = 2
+min_value = -180.0
+max_value = 180.0
+suffix = "°"
+
+[node name="RotationSlider" type="HSlider" parent="TopBar/Margin/Rows/Selection" unique_id=310498852]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+scrollable = false
+
+[node name="SizeLabel" type="Label" parent="TopBar/Margin/Rows/Selection" unique_id=669225284]
+layout_mode = 2
+text = "Size"
+
+[node name="SizeInput" type="SpinBox" parent="TopBar/Margin/Rows/Selection" unique_id=2080012649]
+layout_mode = 2
+
+[node name="SizeSlider" type="HSlider" parent="TopBar/Margin/Rows/Selection" unique_id=572626386]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+scrollable = false
+
+[node name="CollisionCheck" type="CheckBox" parent="TopBar/Margin/Rows/Selection"]
+layout_mode = 2
+tooltip_text = "Off: the car passes through it, so it's only decoration."
+button_pressed = true
+text = "Collision"
+
+[node name="StrengthLabel" type="Label" parent="TopBar/Margin/Rows/Selection"]
+layout_mode = 2
+text = "Strength"
+
+[node name="StrengthInput" type="SpinBox" parent="TopBar/Margin/Rows/Selection"]
+layout_mode = 2
+tooltip_text = "How hard the boost pushes the car."
+min_value = 100.0
+max_value = 3000.0
+step = 10.0
+value = 1000.0
+allow_greater = true
+allow_lesser = true
+
+[node name="StrengthSlider" type="HSlider" parent="TopBar/Margin/Rows/Selection"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+scrollable = false
+
+[node name="Bottom" type="VBoxContainer" parent="." unique_id=268699747]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -119,12 +212,12 @@ offset_bottom = -12.0
 grow_vertical = 0
 mouse_filter = 2
 
-[node name="StatusLabel" type="Label" parent="Bottom"]
+[node name="StatusLabel" type="Label" parent="Bottom" unique_id=661481533]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 
-[node name="HintLabel" type="Label" parent="Bottom"]
+[node name="HintLabel" type="Label" parent="Bottom" unique_id=1815180409]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4

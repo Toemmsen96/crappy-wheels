@@ -12,6 +12,13 @@ downloaded_levels_list = NodePath("MarginContainer/VBoxContainer/ScrollContainer
 no_downloads_label = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/NoDownloadsLabel")
 delete_dialog = NodePath("DeleteDialog")
 
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1414829652]
+custom_minimum_size = Vector2(1920, 1080)
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+color = Color(0.08612115, 0.35106915, 0.5519592, 1)
+
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1432442592]
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,48 +42,48 @@ text = "Level Selector"
 layout_mode = 2
 text = "Level 1"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer" unique_id=366609625]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="Sections" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+[node name="Sections" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer" unique_id=1175630374]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CustomLevelsLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+[node name="CustomLevelsLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections" unique_id=975675222]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Your Levels"
 
-[node name="NoLevelsLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+[node name="NoLevelsLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections" unique_id=333373918]
 layout_mode = 2
 text = "No levels yet. Make one with the Level Builder!"
 
-[node name="CustomLevels" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+[node name="CustomLevels" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections" unique_id=1200267070]
 layout_mode = 2
 
-[node name="DownloadedLevelsLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+[node name="DownloadedLevelsLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections" unique_id=1868493833]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Downloaded Levels"
 
-[node name="NoDownloadsLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+[node name="NoDownloadsLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections" unique_id=223437546]
 layout_mode = 2
 text = "No downloaded levels yet. Get some with Browse Online Levels!"
 
-[node name="DownloadedLevels" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+[node name="DownloadedLevels" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections" unique_id=248733272]
 layout_mode = 2
 
-[node name="BrowseButton" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="BrowseButton" type="Button" parent="MarginContainer/VBoxContainer" unique_id=1645318347]
 layout_mode = 2
 text = "Browse Online Levels"
 
-[node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer" unique_id=1986878775]
 layout_mode = 2
 text = "Back"
 
-[node name="DeleteDialog" type="ConfirmationDialog" parent="."]
+[node name="DeleteDialog" type="ConfirmationDialog" parent="." unique_id=1534043330]
 title = "Delete level?"
 ok_button_text = "Delete"
 

@@ -12,6 +12,7 @@ scroll_scale = Vector2(0, 0)
 custom_minimum_size = Vector2(1920, 1080)
 offset_right = 1920.0
 offset_bottom = 1080.0
+mouse_filter = 2
 color = Color(0.08612115, 0.35106915, 0.5519592, 1)
 
 [node name="Clouds" type="Parallax2D" parent="." unique_id=1669934915]
@@ -23,6 +24,7 @@ repeat_times = 2
 custom_minimum_size = Vector2(1152, 648)
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
 texture = ExtResource("1_x4emh")
 expand_mode = 2
 
@@ -35,5 +37,6 @@ repeat_times = 2
 custom_minimum_size = Vector2(1152, 648)
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
 texture = ExtResource("2_m2aw8")
 expand_mode = 2

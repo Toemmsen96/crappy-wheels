@@ -38,6 +38,7 @@ offset_top = -6.0
 offset_right = 34.0
 offset_bottom = 34.0
 scale = Vector2(0.3137462, 0.3137462)
+mouse_filter = 2
 texture = ExtResource("3_qhqgy")
 expand_mode = 2
 metadata/_edit_use_anchors_ = true
@@ -62,6 +63,7 @@ offset_top = -6.0
 offset_right = 34.0
 offset_bottom = 34.0
 scale = Vector2(0.3137462, 0.3137462)
+mouse_filter = 2
 texture = ExtResource("3_qhqgy")
 expand_mode = 2
 metadata/_edit_use_anchors_ = true
@@ -83,6 +85,7 @@ offset_right = 12.0
 offset_bottom = 13.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.0885599, 0.0885599, 0.0885599, 1)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1267104995]
@@ -100,6 +103,7 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("2_g2els")
 expand_mode = 2
 

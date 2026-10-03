@@ -24,6 +24,7 @@ offset_left = -7.0
 offset_top = -26.0
 offset_right = 33.0
 offset_bottom = 14.0
+mouse_filter = 2
 texture = ExtResource("1_5nbog")
 expand_mode = 2
 
