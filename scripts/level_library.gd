@@ -1,17 +1,19 @@
 class_name LevelLibrary
-## Stores levels made with the level builder as JSON files in user://levels.
+## Stores levels as JSON files, one per level, named after the level's id.
 ##
-## Each file is named after its level's id. Levels downloaded from other
-## players can later be saved here too and will show up like any other level.
+## The player's own levels live in LEVELS_DIR. Levels downloaded from the
+## online level repository live in DOWNLOADS_DIR, so they can't overwrite
+## the player's own levels and re-downloading one updates it.
 
 const LEVELS_DIR := "user://levels"
+const DOWNLOADS_DIR := "user://downloads"
 const FILE_EXTENSION := "json"
 
 
-## Returns every saved level, sorted by name. Files that aren't valid levels are skipped.
-static func list_levels() -> Array[LevelData]:
+## Returns every level in `dir`, sorted by name. Files that aren't valid levels are skipped.
+static func list_levels(dir_path := LEVELS_DIR) -> Array[LevelData]:
 	var levels: Array[LevelData] = []
-	var dir := DirAccess.open(LEVELS_DIR)
+	var dir := DirAccess.open(dir_path)
 	if dir == null:
 		return levels # Nothing has been saved yet.
 
@@ -22,7 +24,7 @@ static func list_levels() -> Array[LevelData]:
 		if not LevelData.is_valid_id(file_id):
 			push_warning("Skipping level file with invalid name: %s" % file_name)
 			continue
-		var level := LevelData.from_json(FileAccess.get_file_as_string(LEVELS_DIR.path_join(file_name)))
+		var level := LevelData.from_json(FileAccess.get_file_as_string(dir_path.path_join(file_name)))
 		if level == null:
 			push_warning("Skipping invalid level file: %s" % file_name)
 			continue
@@ -36,11 +38,11 @@ static func list_levels() -> Array[LevelData]:
 	return levels
 
 
-static func save_level(level: LevelData) -> Error:
-	var error := DirAccess.make_dir_recursive_absolute(LEVELS_DIR)
+static func save_level(level: LevelData, dir_path := LEVELS_DIR) -> Error:
+	var error := DirAccess.make_dir_recursive_absolute(dir_path)
 	if error != OK:
 		return error
-	var file := FileAccess.open(_path_for(level), FileAccess.WRITE)
+	var file := FileAccess.open(_path_for(level, dir_path), FileAccess.WRITE)
 	if file == null:
 		return FileAccess.get_open_error()
 	file.store_string(level.to_json())
@@ -48,9 +50,19 @@ static func save_level(level: LevelData) -> Error:
 	return OK
 
 
-static func delete_level(level: LevelData) -> Error:
-	return DirAccess.remove_absolute(_path_for(level))
+static func delete_level(level: LevelData, dir_path := LEVELS_DIR) -> Error:
+	return DirAccess.remove_absolute(_path_for(level, dir_path))
 
 
-static func _path_for(level: LevelData) -> String:
-	return LEVELS_DIR.path_join("%s.%s" % [level.id, FILE_EXTENSION])
+## Hands the level's file to the player, e.g. to submit it to the level repository.
+## Downloads it in the web build, where user:// isn't reachable; shows it in the file manager elsewhere.
+static func export_level(level: LevelData) -> void:
+	if OS.has_feature("web"):
+		var file_name := "%s.%s" % [level.name.validate_filename(), FILE_EXTENSION]
+		JavaScriptBridge.download_buffer(level.to_json().to_utf8_buffer(), file_name, "application/json")
+	else:
+		OS.shell_show_in_file_manager(ProjectSettings.globalize_path(_path_for(level, LEVELS_DIR)))
+
+
+static func _path_for(level: LevelData, dir_path: String) -> String:
+	return dir_path.path_join("%s.%s" % [level.id, FILE_EXTENSION])

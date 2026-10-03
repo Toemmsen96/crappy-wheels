@@ -73,17 +73,17 @@ func to_dict() -> Dictionary:
 	var tile_dicts: Array[Dictionary] = []
 	for tile in tiles:
 		tile_dicts.append({
-			"x": tile["position"].x,
-			"y": tile["position"].y,
-			"rotation": tile["rotation"],
-			"length": tile["length"],
+			"x": _round(tile["position"].x),
+			"y": _round(tile["position"].y),
+			"rotation": _round(tile["rotation"]),
+			"length": _round(tile["length"]),
 		})
 	var ball_dicts: Array[Dictionary] = []
 	for ball in balls:
 		ball_dicts.append({
-			"x": ball["position"].x,
-			"y": ball["position"].y,
-			"scale": ball["scale"],
+			"x": _round(ball["position"].x),
+			"y": _round(ball["position"].y),
+			"scale": _round(ball["scale"]),
 		})
 	return {
 		"format_version": FORMAT_VERSION,
@@ -161,7 +161,12 @@ static func from_dict(data: Variant) -> LevelData:
 
 
 static func _vector_to_dict(vector: Vector2) -> Dictionary:
-	return {"x": vector.x, "y": vector.y}
+	return {"x": _round(vector.x), "y": _round(vector.y)}
+
+
+## Rounds away float noise like 0.400000005960464, so level files stay readable and diff cleanly.
+static func _round(value: float) -> float:
+	return snappedf(value, 0.0001)
 
 
 ## Returns a Vector2 from a dictionary with numeric "x" and "y", or null.

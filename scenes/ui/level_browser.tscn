@@ -1,0 +1,67 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/level_browser.gd" id="1_browser"]
+[ext_resource type="Script" path="res://scripts/level_repository.gd" id="2_repository"]
+
+[node name="LevelBrowser" type="CanvasLayer" node_paths=PackedStringArray("repository", "level_list", "status_label", "refresh_button", "download_all_button")]
+script = ExtResource("1_browser")
+repository = NodePath("LevelRepository")
+level_list = NodePath("MarginContainer/VBoxContainer/ScrollContainer/LevelList")
+status_label = NodePath("MarginContainer/VBoxContainer/StatusLabel")
+refresh_button = NodePath("MarginContainer/VBoxContainer/Actions/RefreshButton")
+download_all_button = NodePath("MarginContainer/VBoxContainer/Actions/DownloadAllButton")
+
+[node name="LevelRepository" type="Node" parent="."]
+script = ExtResource("2_repository")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 83
+text = "Online Levels"
+
+[node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="Actions" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RefreshButton" type="Button" parent="MarginContainer/VBoxContainer/Actions"]
+layout_mode = 2
+text = "Refresh"
+
+[node name="DownloadAllButton" type="Button" parent="MarginContainer/VBoxContainer/Actions"]
+layout_mode = 2
+disabled = true
+text = "Download All"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="LevelList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Actions/RefreshButton" to="." method="_on_RefreshButton_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Actions/DownloadAllButton" to="." method="_on_DownloadAllButton_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/BackButton" to="." method="_on_BackButton_pressed"]

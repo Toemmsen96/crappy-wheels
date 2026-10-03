@@ -6,7 +6,8 @@ func _ready() -> void:
 	var level := GameState.current_level
 	if level == null:
 		push_error("No builder level selected to play.")
-		get_tree().change_scene_to_file(ScenePaths.LEVEL_SELECTOR)
+		# Deferred, since the tree is still busy adding this scene.
+		get_tree().change_scene_to_file.call_deferred(ScenePaths.LEVEL_SELECTOR)
 		return
 
 	LevelSpawner.spawn_level(level, self)
