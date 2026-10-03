@@ -6,9 +6,11 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kuy6b"]
 size = Vector2(83, 45.5)
 
-[node name="Finish" type="Node2D" unique_id=1487630266 node_paths=PackedStringArray("finishcollider")]
+[node name="Finish" type="Node2D" unique_id=1487630266 node_paths=PackedStringArray("finishcollider", "time_label", "finish_ui")]
 script = ExtResource("1_07gpw")
 finishcollider = NodePath("Area2D")
+time_label = NodePath("CanvasLayer/MarginContainer/VBoxContainer/Time")
+finish_ui = NodePath("CanvasLayer")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1345871448]
 collision_mask = 2
@@ -24,3 +26,46 @@ offset_right = 33.0
 offset_bottom = 14.0
 texture = ExtResource("1_5nbog")
 expand_mode = 2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=532036279]
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer" unique_id=1769391261]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 200
+theme_override_constants/margin_top = 200
+theme_override_constants/margin_right = 200
+theme_override_constants/margin_bottom = 200
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer" unique_id=1822439419]
+layout_mode = 2
+
+[node name="FinishedLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=1178583220]
+layout_mode = 2
+theme_override_font_sizes/font_size = 37
+text = "Level Finished!!!"
+horizontal_alignment = 1
+
+[node name="Timelabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=184529422]
+layout_mode = 2
+text = "Time: "
+horizontal_alignment = 1
+
+[node name="Time" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=11675918]
+layout_mode = 2
+text = "XX"
+horizontal_alignment = 1
+
+[node name="ReturnToMenu" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=72619692]
+layout_mode = 2
+text = "Return to Menu"
+
+[node name="Restart" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=1344728293]
+layout_mode = 2
+text = "Restart Level"
+
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/ReturnToMenu" to="." method="_on_ReturnToMenuButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/Restart" to="." method="_on_RestartButton_pressed"]

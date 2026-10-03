@@ -9,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_nt7q6")
 time_label = NodePath("MarginContainer/HBoxContainer2/MarginContainer2/VBX/elapsed")
 
@@ -19,6 +20,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 25
 theme_override_constants/margin_top = 25
 theme_override_constants/margin_right = 25
@@ -26,9 +28,11 @@ theme_override_constants/margin_bottom = 25
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer" unique_id=439341591]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer2" unique_id=721737399]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
@@ -36,6 +40,7 @@ theme_override_constants/margin_bottom = 10
 
 [node name="VBX2" type="VBoxContainer" parent="MarginContainer/HBoxContainer2/MarginContainer" unique_id=786641405]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Controls" type="Label" parent="MarginContainer/HBoxContainer2/MarginContainer/VBX2" unique_id=335414171]
 layout_mode = 2
@@ -47,6 +52,7 @@ F - Reset to Start"
 
 [node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer2" unique_id=1796876632]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
@@ -54,6 +60,7 @@ theme_override_constants/margin_bottom = 10
 
 [node name="VBX" type="VBoxContainer" parent="MarginContainer/HBoxContainer2/MarginContainer2" unique_id=947943161]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Timer" type="Label" parent="MarginContainer/HBoxContainer2/MarginContainer2/VBX" unique_id=2068472665]
 layout_mode = 2
