@@ -20,6 +20,7 @@ config/icon="uid://bd7p0xfr13ydv"
 
 GameState="*res://scripts/game_state.gd"
 InputHandler="*res://scripts/input_handler.gd"
+Sfx="*res://scripts/sfx.gd"
 
 [display]
 
@@ -29,6 +30,10 @@ window/stretch/aspect="keep_width"
 [dotnet]
 
 project/assembly_name="CrappyWheels"
+
+[gui]
+
+theme/custom="res://assets/ui/theme.tres"
 
 [input]
 
@@ -91,3 +96,4 @@ dash={
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.08612115, 0.35106915, 0.5519592, 1)

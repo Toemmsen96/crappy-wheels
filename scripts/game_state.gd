@@ -23,6 +23,11 @@ const LEVEL1_LEADERBOARD := "level1"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# The theme's handwritten fonts only have Latin letters. Godot's own font
+	# takes over for the rest, e.g. Cyrillic or Greek in a player's name.
+	var font := ThemeDB.get_project_theme().default_font
+	font.fallbacks = font.fallbacks + [ThemeDB.fallback_font]
+
 	var settings := ConfigFile.new()
 	if settings.load(SETTINGS_PATH) == OK:
 		var saved_name: Variant = settings.get_value("player", "name", "")

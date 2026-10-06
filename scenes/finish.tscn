@@ -11,16 +11,16 @@ size = Vector2(83, 45.5)
 [node name="Finish" type="Node2D" unique_id=1487630266 node_paths=PackedStringArray("finishcollider", "time_label", "finish_ui", "backend", "leaderboard_section", "score_message", "score_scroll", "score_list", "name_edit", "submit_button", "leaderboard_status")]
 script = ExtResource("1_07gpw")
 finishcollider = NodePath("Area2D")
-time_label = NodePath("CanvasLayer/MarginContainer/VBoxContainer/Time")
+time_label = NodePath("CanvasLayer/Card/VBoxContainer/Time")
 finish_ui = NodePath("CanvasLayer")
 backend = NodePath("BackendClient")
-leaderboard_section = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection")
-score_message = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/ScoreMessage")
-score_scroll = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/ScoreScroll")
-score_list = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/ScoreScroll/ScoreList")
-name_edit = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/NameRow/NameEdit")
-submit_button = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/NameRow/SubmitButton")
-leaderboard_status = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/LeaderboardStatus")
+leaderboard_section = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection")
+score_message = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/ScoreMessage")
+score_scroll = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/ScoreScroll")
+score_list = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/ScoreScroll/ScoreList")
+name_edit = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/NameRow/NameEdit")
+submit_button = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/NameRow/SubmitButton")
+leaderboard_status = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/LeaderboardStatus")
 
 [node name="BackendClient" type="Node" parent="."]
 script = ExtResource("2_backend")
@@ -42,92 +42,96 @@ texture = ExtResource("1_5nbog")
 expand_mode = 2
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=532036279]
+layer = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer" unique_id=1769391261]
+[node name="Dim" type="ColorRect" parent="CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 200
-theme_override_constants/margin_top = 200
-theme_override_constants/margin_right = 200
-theme_override_constants/margin_bottom = 200
+color = Color(0, 0, 0, 0.35)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer" unique_id=1822439419]
+[node name="Card" type="PanelContainer" parent="CanvasLayer" unique_id=1769391261]
+custom_minimum_size = Vector2(720, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"Card"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Card" unique_id=1822439419]
 layout_mode = 2
 
-[node name="FinishedLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=1178583220]
+[node name="FinishedLabel" type="Label" parent="CanvasLayer/Card/VBoxContainer" unique_id=1178583220]
 layout_mode = 2
 theme_override_font_sizes/font_size = 37
 text = "Level Finished!!!"
 horizontal_alignment = 1
 
-[node name="Timelabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=184529422]
-layout_mode = 2
-text = "Time: "
-horizontal_alignment = 1
-
-[node name="Time" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=11675918]
+[node name="Time" type="Label" parent="CanvasLayer/Card/VBoxContainer" unique_id=11675918]
 layout_mode = 2
 text = "XX"
 horizontal_alignment = 1
 
-[node name="LeaderboardSection" type="VBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+[node name="LeaderboardSection" type="VBoxContainer" parent="CanvasLayer/Card/VBoxContainer"]
 layout_mode = 2
 
-[node name="LeaderboardLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection"]
+[node name="LeaderboardLabel" type="Label" parent="CanvasLayer/Card/VBoxContainer/LeaderboardSection"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "Leaderboard"
 horizontal_alignment = 1
 
-[node name="ScoreMessage" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection"]
+[node name="ScoreMessage" type="Label" parent="CanvasLayer/Card/VBoxContainer/LeaderboardSection"]
 layout_mode = 2
 text = "Loading the leaderboard..."
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="ScoreScroll" type="ScrollContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection"]
+[node name="ScoreScroll" type="ScrollContainer" parent="CanvasLayer/Card/VBoxContainer/LeaderboardSection"]
 visible = false
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="ScoreList" type="GridContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/ScoreScroll"]
+[node name="ScoreList" type="GridContainer" parent="CanvasLayer/Card/VBoxContainer/LeaderboardSection/ScoreScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 24
 columns = 3
 script = ExtResource("3_scores")
 
-[node name="NameRow" type="HBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection"]
+[node name="NameRow" type="HBoxContainer" parent="CanvasLayer/Card/VBoxContainer/LeaderboardSection"]
 layout_mode = 2
 
-[node name="NameLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/NameRow"]
+[node name="NameLabel" type="Label" parent="CanvasLayer/Card/VBoxContainer/LeaderboardSection/NameRow"]
 layout_mode = 2
 text = "Your name:"
 
-[node name="NameEdit" type="LineEdit" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/NameRow"]
+[node name="NameEdit" type="LineEdit" parent="CanvasLayer/Card/VBoxContainer/LeaderboardSection/NameRow"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Name on the leaderboard"
 
-[node name="SubmitButton" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/NameRow"]
+[node name="SubmitButton" type="Button" parent="CanvasLayer/Card/VBoxContainer/LeaderboardSection/NameRow"]
 layout_mode = 2
 text = "Submit Time"
 
-[node name="LeaderboardStatus" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection"]
+[node name="LeaderboardStatus" type="Label" parent="CanvasLayer/Card/VBoxContainer/LeaderboardSection"]
 layout_mode = 2
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="ReturnToMenu" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=72619692]
+[node name="ReturnToMenu" type="Button" parent="CanvasLayer/Card/VBoxContainer" unique_id=72619692]
 layout_mode = 2
 text = "Return to Menu"
 
-[node name="Restart" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=1344728293]
+[node name="Restart" type="Button" parent="CanvasLayer/Card/VBoxContainer" unique_id=1344728293]
 layout_mode = 2
 text = "Restart Level"
 
-[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/ReturnToMenu" to="." method="_on_ReturnToMenuButton_pressed"]
-[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/Restart" to="." method="_on_RestartButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Card/VBoxContainer/ReturnToMenu" to="." method="_on_ReturnToMenuButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Card/VBoxContainer/Restart" to="." method="_on_RestartButton_pressed"]

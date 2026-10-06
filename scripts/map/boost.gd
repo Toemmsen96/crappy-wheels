@@ -15,4 +15,5 @@ func _on_collider_body_entered(_body: Node) -> void:
 	if _body.name == "Player":
 		# Push the way the arrows on the texture point (right when unrotated), so rotating the boost rotates the push.
 		_body.apply_central_impulse(Vector2.RIGHT.rotated(global_rotation) * strength)
+		Sfx.play(Sfx.WEEE)
 

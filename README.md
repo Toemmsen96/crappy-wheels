@@ -22,8 +22,14 @@ Level 1 and every downloaded level have a leaderboard, kept by the backend. When
 
 A downloaded level's leaderboard is named after its place in the level repository, e.g. `Community-loop` for `Community/loop.json`, so it is the same for every player. Times are whatever the game reports; there are no accounts.
 
-`BackendClient` (`scripts/backend_client.gd`) talks to the backend. The backend's address is not in this repository: the game reads it from `backend.cfg` in the project folder, which git ignores. Copy `backend.cfg.example` to `backend.cfg` and put in the address, e.g. `http://127.0.0.1:8080` for a backend running on your machine. The deploy workflow writes the file from the repository secret `BACKEND_URL` (Settings > Secrets and variables > Actions) and fails if the secret is missing. Without the file the game still runs, and the leaderboards and Share report that no server is set up. The address is part of the published web build, so it is not hidden from players; the secret only keeps it out of the repository.
+`BackendClient` (`scripts/backend_client.gd`) talks to the backend. The backend's address is not in this repository: the game reads it from `backend.cfg` in the project folder, which git ignores. Copy `backend.cfg.example` to `backend.cfg` and put in the address, e.g. `http://127.0.0.1:8080` for a backend running on your machine. The deploy workflow writes the file from the repository secret `BACKEND_URL` (Settings > Secrets and variables > Actions) and fails if the secret is missing. Without the file the game still runs, and the leaderboards and Share report that no server is set up.
 
 ## Level Files
 
 Levels are plain JSON rather than Godot scenes, because loading a scene or resource can run scripts inside it. Every level, local or downloaded, goes through `LevelData.from_json()`, which rejects malformed files and clamps out-of-range values. Raise `LevelData.FORMAT_VERSION` when the format changes; older versions of the game skip levels with a newer version.
+
+## Look
+
+Text is set in [Gochi Hand](https://fonts.google.com/specimen/Gochi+Hand); [Patrick Hand](https://fonts.google.com/specimen/Patrick+Hand) fills in letters Gochi Hand lacks, such as č or ł, and Godot's built-in font takes over for other alphabets (`GameState._ready()` adds it). Both fonts are under the SIL Open Font License; the licence texts are next to them in `assets/fonts/`.
+
+Other UI was hand drawn by me (obviously).

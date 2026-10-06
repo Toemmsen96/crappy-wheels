@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cflpq3daw5joa" path="res://assets/wheel.png" id="3_qhqgy"]
 [ext_resource type="PackedScene" uid="uid://66dumd072w4u" path="res://scenes/ui.tscn" id="4_dqkch"]
 [ext_resource type="PackedScene" uid="uid://c4vlhc3pqkb8d" path="res://scenes/ui/pause_menu.tscn" id="5_qlg0r"]
+[ext_resource type="AudioStream" uid="uid://bo31d24gpdou8" path="res://assets/audio/wroo_loop.wav" id="6_engine"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kuy6b"]
 
@@ -12,11 +13,12 @@
 radius = 9.0
 height = 40.0
 
-[node name="Player" type="RigidBody2D" unique_id=776938472 node_paths=PackedStringArray("pin_joint_front", "pin_joint_back")]
+[node name="Player" type="RigidBody2D" unique_id=776938472 node_paths=PackedStringArray("pin_joint_front", "pin_joint_back", "engine_sound")]
 collision_layer = 2
 script = ExtResource("1_3vyb7")
 pin_joint_front = NodePath("PinJointFront")
 pin_joint_back = NodePath("PinJointRear")
+engine_sound = NodePath("Engine")
 
 [node name="PinJointFront" type="PinJoint2D" parent="." unique_id=1085512275]
 position = Vector2(10, 7)
@@ -113,3 +115,9 @@ expand_mode = 2
 
 [node name="PauseMenu" parent="CanvasLayer" unique_id=232731440 instance=ExtResource("5_qlg0r")]
 visible = false
+
+[node name="Engine" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_engine")
+volume_db = -8.0
+pitch_scale = 0.8
+autoplay = true

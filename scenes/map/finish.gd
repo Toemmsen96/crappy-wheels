@@ -4,7 +4,7 @@ extends Node2D
 const MAX_PLAYER_NAME := 24
 ## Rows of the leaderboard shown at once. The list scrolls to the rest, so the
 ## screen still fits in a low window, such as a phone held sideways.
-const VISIBLE_SCORES := 5
+const VISIBLE_SCORES := 4
 
 @export var finishcollider: Area2D
 @export var time_label: Label
@@ -44,9 +44,10 @@ func _on_finishcollider_body_entered(_body: Node) -> void:
 	if _body.name != "Player" or GameState.is_stopped:
 		return
 	GameState.finish_level()
+	Sfx.play(Sfx.FINISH)
 	# Rounded like the time that goes to the leaderboard, so both show the same.
 	_time_ms = roundi(GameState.time_elapsed * 1000.0)
-	time_label.text = "%.3f" % (_time_ms / 1000.0)
+	time_label.text = "Time: %s" % BackendClient.format_time(_time_ms)
 	finish_ui.show()
 	if not GameState.has_leaderboard():
 		return
