@@ -118,7 +118,11 @@ static func _configured_url() -> String:
 	if config.load(CONFIG_PATH) != OK:
 		return ""
 	var url: Variant = config.get_value("backend", "url", "")
-	return url.strip_edges() if url is String else ""
+	if not (url is String) or url.strip_edges().is_empty():
+		return ""
+	var address: String = url.strip_edges()
+	# A bare host name, such as example.org, is taken to mean HTTPS.
+	return address if address.contains("://") else "https://" + address
 
 
 static func _is_number(value: Variant) -> bool:
