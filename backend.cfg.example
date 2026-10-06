@@ -1,0 +1,8 @@
+; Where the Crappy-Wheels backend runs (leaderboards and level sharing).
+; Copy this file to backend.cfg, which git ignores, and put in the address.
+; The deploy workflow writes backend.cfg from the BACKEND_URL secret.
+; Without backend.cfg the game runs, but its online features report an error.
+
+[backend]
+
+url="http://127.0.0.1:8080"

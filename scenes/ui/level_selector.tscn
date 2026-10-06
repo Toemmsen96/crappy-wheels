@@ -2,8 +2,9 @@
 
 [ext_resource type="Script" uid="uid://o700cgvyr8r4" path="res://scenes/ui/level_selector.gd" id="1_jhogm"]
 [ext_resource type="PackedScene" uid="uid://dypaldbflwpxw" path="res://scenes/map/level_1.tscn" id="2_5irit"]
+[ext_resource type="Script" uid="uid://cism81ln01agx" path="res://scripts/backend_client.gd" id="3_backend"]
 
-[node name="LevelSelector" type="CanvasLayer" unique_id=86299285 node_paths=PackedStringArray("custom_levels_list", "no_levels_label", "downloaded_levels_list", "no_downloads_label", "delete_dialog")]
+[node name="LevelSelector" type="CanvasLayer" unique_id=86299285 node_paths=PackedStringArray("custom_levels_list", "no_levels_label", "downloaded_levels_list", "no_downloads_label", "delete_dialog", "share_dialog", "status_label", "backend")]
 script = ExtResource("1_jhogm")
 level1 = ExtResource("2_5irit")
 custom_levels_list = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/CustomLevels")
@@ -11,6 +12,9 @@ no_levels_label = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sectio
 downloaded_levels_list = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/DownloadedLevels")
 no_downloads_label = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/NoDownloadsLabel")
 delete_dialog = NodePath("DeleteDialog")
+share_dialog = NodePath("ShareDialog")
+status_label = NodePath("MarginContainer/VBoxContainer/StatusLabel")
+backend = NodePath("BackendClient")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1414829652]
 custom_minimum_size = Vector2(1920, 1080)
@@ -41,6 +45,11 @@ text = "Level Selector"
 [node name="Button" type="Button" parent="MarginContainer/VBoxContainer" unique_id=2087037737]
 layout_mode = 2
 text = "Level 1"
+
+[node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+autowrap_mode = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer" unique_id=366609625]
 layout_mode = 2
@@ -87,7 +96,16 @@ text = "Back"
 title = "Delete level?"
 ok_button_text = "Delete"
 
+[node name="ShareDialog" type="ConfirmationDialog" parent="."]
+title = "Share level?"
+ok_button_text = "Share"
+dialog_autowrap = true
+
+[node name="BackendClient" type="Node" parent="."]
+script = ExtResource("3_backend")
+
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Button" to="." method="_on_LevelButton_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/BrowseButton" to="." method="_on_BrowseButton_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="confirmed" from="DeleteDialog" to="." method="_on_DeleteDialog_confirmed"]
+[connection signal="confirmed" from="ShareDialog" to="." method="_on_ShareDialog_confirmed"]

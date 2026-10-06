@@ -1,0 +1,81 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://dmntkklt7brr1" path="res://scenes/ui/leaderboards.gd" id="1_leaderboards"]
+[ext_resource type="Script" uid="uid://cism81ln01agx" path="res://scripts/backend_client.gd" id="2_backend"]
+[ext_resource type="Script" uid="uid://cf0j8i8nap5f0" path="res://scenes/ui/score_list.gd" id="3_scores"]
+
+[node name="Leaderboards" type="CanvasLayer" node_paths=PackedStringArray("backend", "level_picker", "refresh_button", "status_label", "score_scroll", "score_list")]
+script = ExtResource("1_leaderboards")
+backend = NodePath("BackendClient")
+level_picker = NodePath("MarginContainer/VBoxContainer/Actions/LevelPicker")
+refresh_button = NodePath("MarginContainer/VBoxContainer/Actions/RefreshButton")
+status_label = NodePath("MarginContainer/VBoxContainer/StatusLabel")
+score_scroll = NodePath("MarginContainer/VBoxContainer/ScrollContainer")
+score_list = NodePath("MarginContainer/VBoxContainer/ScrollContainer/ScoreList")
+
+[node name="BackendClient" type="Node" parent="."]
+script = ExtResource("2_backend")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.08612115, 0.35106915, 0.5519592, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 83
+text = "Leaderboards"
+
+[node name="Actions" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LevelPicker" type="OptionButton" parent="MarginContainer/VBoxContainer/Actions"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Level 1 and the levels you downloaded."
+
+[node name="RefreshButton" type="Button" parent="MarginContainer/VBoxContainer/Actions"]
+layout_mode = 2
+text = "Refresh"
+
+[node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ScoreList" type="GridContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 24
+columns = 3
+script = ExtResource("3_scores")
+
+[node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/Actions/LevelPicker" to="." method="_on_LevelPicker_item_selected"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Actions/RefreshButton" to="." method="_on_RefreshButton_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/BackButton" to="." method="_on_BackButton_pressed"]

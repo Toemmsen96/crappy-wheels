@@ -15,3 +15,7 @@ func _on_LevelBuilderButton_pressed() -> void:
 	# Start the builder with a new level.
 	GameState.current_level = null
 	get_tree().change_scene_to_file(ScenePaths.LEVEL_BUILDER)
+
+
+func _on_LeaderboardsButton_pressed() -> void:
+	get_tree().change_scene_to_file(ScenePaths.LEADERBOARDS)

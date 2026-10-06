@@ -2,15 +2,28 @@
 
 [ext_resource type="Texture2D" uid="uid://bynbt37vapdd4" path="res://assets/flag.png" id="1_5nbog"]
 [ext_resource type="Script" uid="uid://3p1lr2qqn81r" path="res://scenes/map/finish.gd" id="1_07gpw"]
+[ext_resource type="Script" uid="uid://cism81ln01agx" path="res://scripts/backend_client.gd" id="2_backend"]
+[ext_resource type="Script" uid="uid://cf0j8i8nap5f0" path="res://scenes/ui/score_list.gd" id="3_scores"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kuy6b"]
 size = Vector2(83, 45.5)
 
-[node name="Finish" type="Node2D" unique_id=1487630266 node_paths=PackedStringArray("finishcollider", "time_label", "finish_ui")]
+[node name="Finish" type="Node2D" unique_id=1487630266 node_paths=PackedStringArray("finishcollider", "time_label", "finish_ui", "backend", "leaderboard_section", "score_message", "score_scroll", "score_list", "name_edit", "submit_button", "leaderboard_status")]
 script = ExtResource("1_07gpw")
 finishcollider = NodePath("Area2D")
 time_label = NodePath("CanvasLayer/MarginContainer/VBoxContainer/Time")
 finish_ui = NodePath("CanvasLayer")
+backend = NodePath("BackendClient")
+leaderboard_section = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection")
+score_message = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/ScoreMessage")
+score_scroll = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/ScoreScroll")
+score_list = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/ScoreScroll/ScoreList")
+name_edit = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/NameRow/NameEdit")
+submit_button = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/NameRow/SubmitButton")
+leaderboard_status = NodePath("CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/LeaderboardStatus")
+
+[node name="BackendClient" type="Node" parent="."]
+script = ExtResource("2_backend")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1345871448]
 collision_mask = 2
@@ -59,6 +72,54 @@ horizontal_alignment = 1
 layout_mode = 2
 text = "XX"
 horizontal_alignment = 1
+
+[node name="LeaderboardSection" type="VBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LeaderboardLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Leaderboard"
+horizontal_alignment = 1
+
+[node name="ScoreMessage" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection"]
+layout_mode = 2
+text = "Loading the leaderboard..."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ScoreScroll" type="ScrollContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection"]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="ScoreList" type="GridContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/ScoreScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 24
+columns = 3
+script = ExtResource("3_scores")
+
+[node name="NameRow" type="HBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/NameRow"]
+layout_mode = 2
+text = "Your name:"
+
+[node name="NameEdit" type="LineEdit" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/NameRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Name on the leaderboard"
+
+[node name="SubmitButton" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection/NameRow"]
+layout_mode = 2
+text = "Submit Time"
+
+[node name="LeaderboardStatus" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/LeaderboardSection"]
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="ReturnToMenu" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=72619692]
 layout_mode = 2

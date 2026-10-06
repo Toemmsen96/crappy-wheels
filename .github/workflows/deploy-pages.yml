@@ -46,6 +46,18 @@ jobs:
           unzip -j templates.tpz templates/version.txt templates/web_nothreads_release.zip -d ${{ env.TEMPLATES_DIR }}
           rm templates.tpz
 
+      # The backend's address stays out of the repository. It ends up inside the
+      # web build, so players can still find it; the secret only keeps it out of git.
+      - name: Write backend address
+        env:
+          BACKEND_URL: ${{ secrets.BACKEND_URL }}
+        run: |
+          if [ -z "$BACKEND_URL" ]; then
+            echo "::error::The BACKEND_URL secret is not set (Settings > Secrets and variables > Actions)."
+            exit 1
+          fi
+          printf '[backend]\n\nurl="%s"\n' "$BACKEND_URL" > backend.cfg
+
       - name: Import project
         run: godot --headless --import
 

@@ -10,8 +10,20 @@ Open **Level Builder** from the main menu to make your own levels: draw floors, 
 
 ## Sharing Levels
 
-Community levels live in [crappy-wheels-levels](https://github.com/Toemmsen96/crappy-wheels-levels). To submit one, press **Export** next to it in the level selector to get its `.json` file, then open a pull request adding it to the `Community/` folder.
+Community levels live in [crappy-wheels-levels](https://github.com/Toemmsen96/crappy-wheels-levels). To share one of your levels, press **Share** next to it in the level selector: the [backend](https://github.com/Toemmsen96/crappy-wheels-backend) adds it to the `Community/` folder right away. A level can be shared once; changes made to it afterwards can't be shared yet. You can also press **Export** to get its `.json` file and open a pull request adding it to `Community/`.
 
 **Browse Online Levels** in the level selector lists every `.json` file directly inside `Base/` and `Community/` of that repository's `main` branch, and downloads them into `user://downloads/`. Downloaded levels show up under **Downloaded Levels**. Downloading one again updates it. The repository must be public for this to work.
+
+## Leaderboards
+
+Level 1 and every downloaded level have a leaderboard, kept by the backend. When you finish one, the finish screen shows the ten fastest times (five at a time, the list scrolls) and submits yours under your name, which you enter the first time and which is remembered in `user://settings.cfg`. Only each name's best time is kept. Your own levels have no leaderboard, since they can still be edited, and neither do test runs from the Level Builder.
+
+**Leaderboards** in the main menu shows the fastest times (up to 100) of Level 1 and of each downloaded level, starting with the level you played last.
+
+A downloaded level's leaderboard is named after its place in the level repository, e.g. `Community-loop` for `Community/loop.json`, so it is the same for every player. Times are whatever the game reports; there are no accounts.
+
+`BackendClient` (`scripts/backend_client.gd`) talks to the backend. The backend's address is not in this repository: the game reads it from `backend.cfg` in the project folder, which git ignores. Copy `backend.cfg.example` to `backend.cfg` and put in the address, e.g. `http://127.0.0.1:8080` for a backend running on your machine. The deploy workflow writes the file from the repository secret `BACKEND_URL` (Settings > Secrets and variables > Actions) and fails if the secret is missing. Without the file the game still runs, and the leaderboards and Share report that no server is set up. The address is part of the published web build, so it is not hidden from players; the secret only keeps it out of the repository.
+
+## Level Files
 
 Levels are plain JSON rather than Godot scenes, because loading a scene or resource can run scripts inside it. Every level, local or downloaded, goes through `LevelData.from_json()`, which rejects malformed files and clamps out-of-range values. Raise `LevelData.FORMAT_VERSION` when the format changes; older versions of the game skip levels with a newer version.

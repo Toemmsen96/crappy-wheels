@@ -5,5 +5,8 @@
 # Web export output
 /build/
 
+# Address of the backend; see backend.cfg.example
+/backend.cfg
+
 .vscode/
 *.png~
