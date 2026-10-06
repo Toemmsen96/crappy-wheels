@@ -1,22 +1,22 @@
-[gd_resource type="Theme" format=3]
+[gd_resource type="Theme" format=3 uid="uid://6kqivll62w87"]
 
-[ext_resource type="Texture2D" path="res://assets/ui/box.png" id="1_s0eex"]
-[ext_resource type="Texture2D" path="res://assets/ui/focus.png" id="2_llups"]
-[ext_resource type="Texture2D" path="res://assets/ui/check_on.png" id="3_iy48a"]
-[ext_resource type="Texture2D" path="res://assets/ui/radio_on.png" id="4_ix1fq"]
-[ext_resource type="Texture2D" path="res://assets/ui/radio_off.png" id="5_acm8m"]
-[ext_resource type="Texture2D" path="res://assets/ui/check_off.png" id="6_knjjy"]
-[ext_resource type="Texture2D" path="res://assets/ui/pill.png" id="7_ngpgj"]
-[ext_resource type="Texture2D" path="res://assets/ui/line_h.png" id="8_yuyab"]
-[ext_resource type="Texture2D" path="res://assets/ui/wheel_grabber.png" id="9_oam8o"]
-[ext_resource type="Texture2D" path="res://assets/ui/wheel_grabber_spin.png" id="10_unbus"]
-[ext_resource type="Texture2D" path="res://assets/ui/close.png" id="11_tb1mf"]
-[ext_resource type="Texture2D" path="res://assets/ui/arrow_down.png" id="12_il2qg"]
-[ext_resource type="Texture2D" path="res://assets/ui/down.png" id="13_y7wg7"]
-[ext_resource type="Texture2D" path="res://assets/ui/up.png" id="14_pk2vs"]
-[ext_resource type="Texture2D" path="res://assets/ui/line_v.png" id="15_mw5fd"]
-[ext_resource type="FontFile" path="res://assets/fonts/GochiHand-Regular.ttf" id="16_mkrm2"]
-[ext_resource type="FontFile" path="res://assets/fonts/PatrickHand-Regular.ttf" id="17_hvi5t"]
+[ext_resource type="Texture2D" uid="uid://c35jy0uw0yfn5" path="res://assets/ui/box.png" id="1_s0eex"]
+[ext_resource type="Texture2D" uid="uid://ds1wyssmgu8me" path="res://assets/ui/focus.png" id="2_llups"]
+[ext_resource type="Texture2D" uid="uid://dwdl4dcdid6kw" path="res://assets/ui/check_on.png" id="3_iy48a"]
+[ext_resource type="Texture2D" uid="uid://mqpcjo74ntnu" path="res://assets/ui/radio_on.png" id="4_ix1fq"]
+[ext_resource type="Texture2D" uid="uid://en28arwuj1on" path="res://assets/ui/radio_off.png" id="5_acm8m"]
+[ext_resource type="Texture2D" uid="uid://u4vc5vhkubp3" path="res://assets/ui/check_off.png" id="6_knjjy"]
+[ext_resource type="Texture2D" uid="uid://bqge5kijb0cp" path="res://assets/ui/pill.png" id="7_ngpgj"]
+[ext_resource type="Texture2D" uid="uid://dhwk4o2j28rox" path="res://assets/ui/line_h.png" id="8_yuyab"]
+[ext_resource type="Texture2D" uid="uid://d0b5u6c3le4uh" path="res://assets/ui/wheel_grabber.png" id="9_oam8o"]
+[ext_resource type="Texture2D" uid="uid://d0tiji5876pno" path="res://assets/ui/wheel_grabber_spin.png" id="10_unbus"]
+[ext_resource type="Texture2D" uid="uid://fjglhn681bqg" path="res://assets/ui/close.png" id="11_tb1mf"]
+[ext_resource type="Texture2D" uid="uid://bl7w55moywy6s" path="res://assets/ui/arrow_down.png" id="12_il2qg"]
+[ext_resource type="Texture2D" uid="uid://64vdibgaxfn2" path="res://assets/ui/down.png" id="13_y7wg7"]
+[ext_resource type="Texture2D" uid="uid://b5oeob8p0bwvq" path="res://assets/ui/up.png" id="14_pk2vs"]
+[ext_resource type="Texture2D" uid="uid://cf2sf0bbuiegl" path="res://assets/ui/line_v.png" id="15_mw5fd"]
+[ext_resource type="FontFile" uid="uid://dgof6wrxe2bo8" path="res://assets/fonts/GochiHand-Regular.ttf" id="16_mkrm2"]
+[ext_resource type="FontFile" uid="uid://d7y117jhi2cx" path="res://assets/fonts/PatrickHand-Regular.ttf" id="17_hvi5t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s0eex"]
 content_margin_left = 8.0
@@ -365,6 +365,18 @@ SpinBox/styles/up_background_disabled = SubResource("StyleBoxEmpty_8h5op")
 SpinBox/styles/up_background_hovered = SubResource("StyleBoxEmpty_8h5op")
 SpinBox/styles/up_background_pressed = SubResource("StyleBoxEmpty_8h5op")
 SpinBox/styles/up_down_buttons_separator = SubResource("StyleBoxEmpty_8h5op")
+TextEdit/colors/background_color = Color(0, 0, 0, 0)
+TextEdit/colors/caret_color = Color(0.08, 0.08, 0.08, 1)
+TextEdit/colors/font_color = Color(0.08, 0.08, 0.08, 1)
+TextEdit/colors/font_placeholder_color = Color(0.08, 0.08, 0.08, 0.45)
+TextEdit/colors/font_readonly_color = Color(0.08, 0.08, 0.08, 0.45)
+TextEdit/colors/font_selected_color = Color(0.08, 0.08, 0.08, 1)
+TextEdit/colors/selection_color = Color(1, 0.89, 0.42, 0.8)
+TextEdit/constants/caret_width = 2
+TextEdit/constants/outline_size = 0
+TextEdit/styles/focus = SubResource("StyleBoxTexture_iy48a")
+TextEdit/styles/normal = SubResource("StyleBoxTexture_knjjy")
+TextEdit/styles/read_only = SubResource("StyleBoxTexture_llups")
 TooltipLabel/colors/font_color = Color(0.08, 0.08, 0.08, 1)
 TooltipLabel/constants/outline_size = 0
 TooltipPanel/styles/panel = SubResource("StyleBoxTexture_vets7")

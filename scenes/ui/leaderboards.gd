@@ -47,7 +47,7 @@ func _load_scores() -> void:
 	# One load at a time: the picker and the button stay off until the answer is in.
 	_set_busy(true)
 	_show_status("Loading the leaderboard...")
-	var scores := await backend.fetch_scores(_leaderboard_ids[level_picker.selected], SCORE_LIMIT)
+	var scores := await backend.fetch_scores(_leaderboard_ids[level_picker.selected], SCORE_LIMIT, GameState.player_id)
 	_set_busy(false)
 	var own_row := score_list.show_scores(scores)
 	if not backend.last_error.is_empty():

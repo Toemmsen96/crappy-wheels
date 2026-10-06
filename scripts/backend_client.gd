@@ -6,6 +6,9 @@ extends Node
 ## Methods are coroutines: `await` them, then check last_error.
 
 const TIMEOUT_SECONDS := 15.0
+## Sharing waits for the server to push the level to GitHub, after any share
+## that is already in progress.
+const SHARE_TIMEOUT_SECONDS := 60.0
 ## Answers are small JSON documents; anything bigger is not from the backend.
 const MAX_RESPONSE_BYTES := 64 * 1024
 
@@ -29,10 +32,14 @@ func _ready() -> void:
 
 
 ## Returns the fastest times on a level, best first, as dictionaries with
-## "rank", "name" and "time_ms".
-func fetch_scores(leaderboard_id: String, limit := 10) -> Array[Dictionary]:
+## "rank", "name" and "time_ms". With a player_id, that player's score also
+## has "you" set to true.
+func fetch_scores(leaderboard_id: String, limit := 10, player_id := "") -> Array[Dictionary]:
 	var scores: Array[Dictionary] = []
-	var answer: Variant = await _request(HTTPClient.METHOD_GET, "/v1/levels/%s/scores?limit=%d" % [leaderboard_id.uri_encode(), limit])
+	var path := "/v1/levels/%s/scores?limit=%d" % [leaderboard_id.uri_encode(), limit]
+	if not player_id.is_empty():
+		path += "&player=" + player_id.uri_encode()
+	var answer: Variant = await _request(HTTPClient.METHOD_GET, path)
 	if answer == null:
 		return scores
 	if not (answer.get("scores") is Array):
@@ -44,10 +51,11 @@ func fetch_scores(leaderboard_id: String, limit := 10) -> Array[Dictionary]:
 	return scores
 
 
-## Submits a finishing time. The server keeps only each name's best time.
+## Submits a finishing time. The server keeps only each player's best time;
+## player_id tells players apart, player_name is what the leaderboard shows.
 ## Returns its answer with "best_time_ms", "rank" and "improved", or {} on failure.
-func submit_score(leaderboard_id: String, player_name: String, time_ms: int) -> Dictionary:
-	var body := JSON.stringify({"name": player_name, "time_ms": time_ms})
+func submit_score(leaderboard_id: String, player_id: String, player_name: String, time_ms: int) -> Dictionary:
+	var body := JSON.stringify({"player_id": player_id, "name": player_name, "time_ms": time_ms})
 	var answer: Variant = await _request(HTTPClient.METHOD_POST, "/v1/levels/%s/scores" % leaderboard_id.uri_encode(), body)
 	if answer == null:
 		return {}
@@ -61,7 +69,7 @@ func submit_score(leaderboard_id: String, player_name: String, time_ms: int) -> 
 ## the level repository. Returns its answer with "id", "path" and "url", or {}
 ## on failure. last_status is 409 if a level with this id was shared before.
 func share_level(level: LevelData) -> Dictionary:
-	var answer: Variant = await _request(HTTPClient.METHOD_POST, "/v1/levels", level.to_json())
+	var answer: Variant = await _request(HTTPClient.METHOD_POST, "/v1/levels", level.to_json(), SHARE_TIMEOUT_SECONDS)
 	return answer if answer != null else {}
 
 
@@ -71,7 +79,7 @@ static func format_time(time_ms: float) -> String:
 
 
 ## Returns the answer as a Dictionary, or null and sets last_error.
-func _request(method: HTTPClient.Method, path: String, body := "") -> Variant:
+func _request(method: HTTPClient.Method, path: String, body := "", timeout := TIMEOUT_SECONDS) -> Variant:
 	last_error = ""
 	last_status = 0
 	if base_url.is_empty():
@@ -79,7 +87,7 @@ func _request(method: HTTPClient.Method, path: String, body := "") -> Variant:
 		return null
 	var request := HTTPRequest.new()
 	request.body_size_limit = MAX_RESPONSE_BYTES
-	request.timeout = TIMEOUT_SECONDS
+	request.timeout = timeout
 	add_child(request)
 	var headers := PackedStringArray()
 	if not body.is_empty():

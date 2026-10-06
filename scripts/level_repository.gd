@@ -4,7 +4,9 @@ extends Node
 ##
 ## Levels are submitted there with pull requests. Every .json file directly
 ## inside one of FOLDERS is listed, so merged levels show up without an index.
-## Methods are coroutines: `await` them, then check last_error.
+## Methods are coroutines: `await` them, then check last_error. Several calls
+## can run at once, so read last_error right after the `await`, before awaiting
+## anything else.
 
 const FOLDERS: Array[String] = ["Base", "Community"]
 ## Larger files are skipped. Levels at LevelData.MAX_OBJECTS are around 200 KB.

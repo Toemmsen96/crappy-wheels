@@ -1,0 +1,152 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/credits.gd" id="1_credits"]
+
+[node name="Credits" type="CanvasLayer" node_paths=PackedStringArray("fonts_content", "engine_content")]
+script = ExtResource("1_credits")
+fonts_content = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/FontsPanel/Margin/Content")
+engine_content = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/EnginePanel/Margin/Content")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.08612115, 0.35106915, 0.5519592, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 83
+text = "Credits"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="Sections" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="GameHeader" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Crappy Wheels"
+
+[node name="GamePanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/GamePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="Text" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/GamePanel/Margin"]
+layout_mode = 2
+theme_override_constants/outline_size = 0
+text = "A game by Toemmsen96
+https://github.com/Toemmsen96/crappy-wheels"
+autowrap_mode = 3
+
+[node name="LicensesHeader" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Licenses"
+
+[node name="LicensesPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/LicensesPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="Text" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/LicensesPanel/Margin"]
+layout_mode = 2
+theme_override_constants/outline_size = 0
+text = "Copyright 2026 Toemmsen96
+
+The code of Crappy Wheels is licensed under the PolyForm Noncommercial License 1.0.0 (LICENSE.md, https://polyformproject.org/licenses/noncommercial/1.0.0).
+
+Its art, sound and levels are licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0, LICENSE-ASSETS.md, https://creativecommons.org/licenses/by-nc-sa/4.0/).
+
+Levels shared from the game are published under CC BY-NC-SA 4.0 too."
+autowrap_mode = 3
+
+[node name="FontsHeader" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Fonts"
+
+[node name="FontsPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/FontsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/FontsPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Text" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/FontsPanel/Margin/Content"]
+layout_mode = 2
+theme_override_constants/outline_size = 0
+text = "\"Gochi Hand\" by Juan Pablo del Peral (Huerta Tipográfica)
+Copyright (c) 2011, Juan Pablo del Peral (juandelperal@htfonts.com), with Reserved Font Names \"Gochi\" and \"Gochi Hand\"
+
+\"Patrick Hand\" by Patrick Wagesreiter
+Copyright (c) 2010-2012 Patrick Wagesreiter (mail@patrickwagesreiter.at)
+
+Both fonts are licensed under the SIL Open Font License, Version 1.1:"
+autowrap_mode = 3
+
+[node name="EngineHeader" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Godot Engine"
+
+[node name="EnginePanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/EnginePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/EnginePanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/BackButton" to="." method="_on_BackButton_pressed"]

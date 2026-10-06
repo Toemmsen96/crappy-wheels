@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://dypaldbflwpxw" path="res://scenes/map/level_1.tscn" id="2_5irit"]
 [ext_resource type="Script" uid="uid://cism81ln01agx" path="res://scripts/backend_client.gd" id="3_backend"]
 
-[node name="LevelSelector" type="CanvasLayer" unique_id=86299285 node_paths=PackedStringArray("custom_levels_list", "no_levels_label", "downloaded_levels_list", "no_downloads_label", "delete_dialog", "share_dialog", "status_label", "backend")]
+[node name="LevelSelector" type="CanvasLayer" unique_id=86299285 node_paths=PackedStringArray("custom_levels_list", "no_levels_label", "downloaded_levels_list", "no_downloads_label", "delete_dialog", "share_dialog", "share_label", "description_edit", "status_label", "backend")]
 script = ExtResource("1_jhogm")
 level1 = ExtResource("2_5irit")
 custom_levels_list = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/CustomLevels")
@@ -13,6 +13,8 @@ downloaded_levels_list = NodePath("MarginContainer/VBoxContainer/ScrollContainer
 no_downloads_label = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/NoDownloadsLabel")
 delete_dialog = NodePath("DeleteDialog")
 share_dialog = NodePath("ShareDialog")
+share_label = NodePath("ShareDialog/VBoxContainer/ShareLabel")
+description_edit = NodePath("ShareDialog/VBoxContainer/DescriptionEdit")
 status_label = NodePath("MarginContainer/VBoxContainer/StatusLabel")
 backend = NodePath("BackendClient")
 
@@ -98,9 +100,24 @@ ok_button_text = "Delete"
 
 [node name="ShareDialog" type="ConfirmationDialog" parent="."]
 title = "Share level?"
-size = Vector2i(560, 100)
 ok_button_text = "Share"
-dialog_autowrap = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ShareDialog"]
+
+[node name="ShareLabel" type="Label" parent="ShareDialog/VBoxContainer"]
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="DescriptionLabel" type="Label" parent="ShareDialog/VBoxContainer"]
+layout_mode = 2
+text = "Description (optional):"
+
+[node name="DescriptionEdit" type="TextEdit" parent="ShareDialog/VBoxContainer"]
+custom_minimum_size = Vector2(0, 130)
+layout_mode = 2
+placeholder_text = "What's special about this level?"
+wrap_mode = 1
 
 [node name="BackendClient" type="Node" parent="."]
 script = ExtResource("3_backend")
@@ -110,3 +127,4 @@ script = ExtResource("3_backend")
 [connection signal="pressed" from="MarginContainer/VBoxContainer/BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="confirmed" from="DeleteDialog" to="." method="_on_DeleteDialog_confirmed"]
 [connection signal="confirmed" from="ShareDialog" to="." method="_on_ShareDialog_confirmed"]
+[connection signal="text_changed" from="ShareDialog/VBoxContainer/DescriptionEdit" to="." method="_on_DescriptionEdit_text_changed"]

@@ -16,7 +16,7 @@ Community levels live in [crappy-wheels-levels](https://github.com/Toemmsen96/cr
 
 ## Leaderboards
 
-Level 1 and every downloaded level have a leaderboard, kept by the backend. When you finish one, the finish screen shows the ten fastest times (five at a time, the list scrolls) and submits yours under your name, which you enter the first time and which is remembered in `user://settings.cfg`. Only each name's best time is kept. Your own levels have no leaderboard, since they can still be edited, and neither do test runs from the Level Builder.
+Level 1 and every downloaded level have a leaderboard, kept by the backend. When you finish one, the finish screen shows the ten fastest times and submits yours under your name, which you enter the first time and which is remembered in `user://settings.cfg`. Only each name's best time is kept. Your own levels have no leaderboard, since they can still be edited, and neither do test runs from the Level Builder.
 
 **Leaderboards** in the main menu shows the fastest times (up to 100) of Level 1 and of each downloaded level, starting with the level you played last.
 
@@ -33,3 +33,7 @@ Levels are plain JSON rather than Godot scenes, because loading a scene or resou
 Text is set in [Gochi Hand](https://fonts.google.com/specimen/Gochi+Hand); [Patrick Hand](https://fonts.google.com/specimen/Patrick+Hand) fills in letters Gochi Hand lacks, such as č or ł, and Godot's built-in font takes over for other alphabets (`GameState._ready()` adds it). Both fonts are under the SIL Open Font License; the licence texts are next to them in `assets/fonts/`.
 
 Other UI was hand drawn by me (obviously).
+
+## License
+
+The code is under the [PolyForm Noncommercial License 1.0.0](LICENSE.md); art, sound and levels are under [CC BY-NC-SA 4.0](LICENSE-ASSETS.md). The fonts are under the SIL Open Font License 1.1 (see `assets/fonts/`), and Godot Engine is under the MIT license; the game's Credits screen shows these notices.

@@ -7,14 +7,14 @@ func _ready() -> void:
 	columns = 3
 
 
-## Replaces the rows with `scores`. Returns the row with the player's own name,
-## or null if it isn't among them.
+## Replaces the rows with `scores`. Returns the row of the player's own score,
+## which the backend marks with "you", or null if it isn't among them.
 func show_scores(scores: Array[Dictionary]) -> Control:
 	for child in get_children():
 		child.queue_free()
 	var own_row: Control = null
 	for score in scores:
-		var own: bool = score["name"] == GameState.player_name
+		var own: bool = score.get("you") == true
 		_add_label("%d." % int(score["rank"]))
 		var name_label := _add_label(score["name"] + (" (you)" if own else ""))
 		# The name column takes the free space.

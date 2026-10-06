@@ -8,7 +8,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kuy6b"]
 size = Vector2(83, 45.5)
 
-[node name="Finish" type="Node2D" unique_id=1487630266 node_paths=PackedStringArray("finishcollider", "time_label", "finish_ui", "backend", "leaderboard_section", "score_message", "score_scroll", "score_list", "name_edit", "submit_button", "leaderboard_status")]
+[node name="Finish" type="Node2D" unique_id=1487630266 node_paths=PackedStringArray("finishcollider", "time_label", "finish_ui", "backend", "leaderboard_section", "score_message", "score_scroll", "score_list", "name_edit", "submit_button", "leaderboard_status", "return_button")]
 script = ExtResource("1_07gpw")
 finishcollider = NodePath("Area2D")
 time_label = NodePath("CanvasLayer/Card/VBoxContainer/Time")
@@ -21,6 +21,7 @@ score_list = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/ScoreSc
 name_edit = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/NameRow/NameEdit")
 submit_button = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/NameRow/SubmitButton")
 leaderboard_status = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/LeaderboardStatus")
+return_button = NodePath("CanvasLayer/Card/VBoxContainer/ReturnToMenu")
 
 [node name="BackendClient" type="Node" parent="."]
 script = ExtResource("2_backend")

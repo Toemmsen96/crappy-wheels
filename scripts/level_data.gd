@@ -10,6 +10,7 @@ extends RefCounted
 const FORMAT_VERSION := 1
 const MAX_NAME_LENGTH := 64
 const MAX_AUTHOR_LENGTH := 64
+const MAX_DESCRIPTION_LENGTH := 300
 const MAX_OBJECTS := 2000
 const MAX_COORDINATE := 100000.0
 const MIN_TILE_LENGTH := 5.0
@@ -28,6 +29,8 @@ static var _id_regex := RegEx.create_from_string("^[A-Za-z0-9_-]{1,64}$")
 var id := ""
 var name := ""
 var author := ""
+## Optional, written by the author when sharing the level. Not saved when empty.
+var description := ""
 var start := Vector2.ZERO
 var finish := Vector2.ZERO
 ## Floor tiles as {"position": Vector2, "rotation": float, "length": float, "collision": bool}.
@@ -116,7 +119,7 @@ func to_dict() -> Dictionary:
 			"scale": _round(boost["scale"]),
 			"strength": _round(boost["strength"]),
 		})
-	return {
+	var data := {
 		"format_version": FORMAT_VERSION,
 		"id": id,
 		"name": name,
@@ -127,6 +130,10 @@ func to_dict() -> Dictionary:
 		"balls": ball_dicts,
 		"boosts": boost_dicts,
 	}
+	# Only written when set, so levels without one keep their files unchanged.
+	if not description.is_empty():
+		data["description"] = description
+	return data
 
 
 func to_json() -> String:
@@ -168,6 +175,7 @@ static func from_dict(data: Variant) -> LevelData:
 	if level.name.is_empty():
 		level.name = "Untitled"
 	level.author = _read_string(data.get("author"), MAX_AUTHOR_LENGTH)
+	level.description = _read_string(data.get("description"), MAX_DESCRIPTION_LENGTH)
 	level.start = start_position
 	level.finish = finish_position
 
@@ -231,10 +239,18 @@ static func _read_collision(raw: Dictionary) -> bool:
 	return collision if collision is bool else true
 
 
+## Turns line breaks and tabs into spaces: names, authors and descriptions are one line.
+## The backend cleans level text the same way.
+static func to_single_line(text: String) -> String:
+	for character: String in ["\n", "\t", " ", " "]:
+		text = text.replace(character, " ")
+	return text
+
+
 static func _read_string(raw: Variant, max_length: int) -> String:
 	if not (raw is String):
 		return ""
-	return raw.replace("\n", " ").strip_edges().left(max_length)
+	return to_single_line(raw).strip_edges().left(max_length)
 
 
 static func _is_number(value: Variant) -> bool:

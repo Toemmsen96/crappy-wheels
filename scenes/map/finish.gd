@@ -19,6 +19,7 @@ const VISIBLE_SCORES := 4
 @export var name_edit: LineEdit
 @export var submit_button: Button
 @export var leaderboard_status: Label
+@export var return_button: Button
 
 var _time_ms := 0
 
@@ -33,6 +34,8 @@ func _ready() -> void:
 	# Changing the name allows submitting the time under the new one.
 	name_edit.text_changed.connect(func(_text: String) -> void: submit_button.disabled = false)
 	submit_button.pressed.connect(_submit_time)
+	if GameState.testing_in_builder:
+		return_button.text = "Back to Level Builder"
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -72,7 +75,7 @@ func _submit_time() -> void:
 	GameState.set_player_name(player_name)
 	submit_button.disabled = true
 	leaderboard_status.text = "Submitting your time..."
-	var answer := await backend.submit_score(GameState.leaderboard_id, player_name, _time_ms)
+	var answer := await backend.submit_score(GameState.leaderboard_id, GameState.ensure_player_id(), player_name, _time_ms)
 	if answer.is_empty():
 		leaderboard_status.text = "Could not submit your time: %s" % backend.last_error
 		submit_button.disabled = false
@@ -88,7 +91,7 @@ func _submit_time() -> void:
 
 
 func _load_scores() -> void:
-	var scores := await backend.fetch_scores(GameState.leaderboard_id)
+	var scores := await backend.fetch_scores(GameState.leaderboard_id, 10, GameState.player_id)
 	var own_row := score_list.show_scores(scores)
 	if not backend.last_error.is_empty():
 		score_message.text = "Could not load the leaderboard: %s" % backend.last_error
@@ -108,7 +111,10 @@ func _load_scores() -> void:
 
 
 func _on_ReturnToMenuButton_pressed() -> void:
-	get_tree().change_scene_to_file(ScenePaths.MAIN_MENU)
+	if GameState.testing_in_builder:
+		get_tree().change_scene_to_file(ScenePaths.LEVEL_BUILDER)
+	else:
+		get_tree().change_scene_to_file(ScenePaths.MAIN_MENU)
 
 func _on_RestartButton_pressed() -> void:
 	GameState.reset()

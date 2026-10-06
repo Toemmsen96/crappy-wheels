@@ -117,7 +117,7 @@ func _physics_process(_delta: float) -> void:
 
 	# Handle Boost.
 	if _boost_held:
-		apply_impulse(Vector2.RIGHT * SPEED_MULTIPLIER)
+		push(Vector2.RIGHT * SPEED_MULTIPLIER)
 
 	# Up accelerates forward, down brakes and then reverses.
 	# Positive angular velocity is clockwise, which rolls the car to the right.
@@ -130,6 +130,15 @@ func _physics_process(_delta: float) -> void:
 	var tilt := (1.0 if _right_held else 0.0) - (1.0 if _left_held else 0.0)
 	if tilt != 0:
 		apply_torque(tilt * tilt_torque)
+
+
+## Pushes the whole car: body and wheels share `impulse` by their mass, so all
+## of it speeds up alike. Pushing only the body leaves the wheels behind and
+## flips the car over them.
+func push(impulse: Vector2) -> void:
+	var total_mass := mass + _wheel_front.mass + _wheel_back.mass
+	for body: RigidBody2D in [self, _wheel_front, _wheel_back]:
+		body.apply_central_impulse(impulse * body.mass / total_mass)
 
 
 static func _drive_wheel(wheel: RigidBody2D, throttle: float, torque: float, top_wheel_speed: float) -> void:

@@ -19,3 +19,7 @@ func _on_LevelBuilderButton_pressed() -> void:
 
 func _on_LeaderboardsButton_pressed() -> void:
 	get_tree().change_scene_to_file(ScenePaths.LEADERBOARDS)
+
+
+func _on_CreditsButton_pressed() -> void:
+	get_tree().change_scene_to_file(ScenePaths.CREDITS)
