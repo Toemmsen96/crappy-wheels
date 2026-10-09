@@ -6,8 +6,8 @@ extends Node
 ## Methods are coroutines: `await` them, then check last_error.
 
 const TIMEOUT_SECONDS := 15.0
-## Sharing a level or a replay waits for the server to push it to GitHub,
-## after any upload that is already in progress.
+## Sharing a level or a replay, or a time with its replay, waits for the
+## server to push it to GitHub, after any upload that is already in progress.
 const SHARE_TIMEOUT_SECONDS := 60.0
 ## Answers are small JSON documents; anything bigger is not from the backend.
 const MAX_RESPONSE_BYTES := 64 * 1024
@@ -54,12 +54,19 @@ func fetch_scores(leaderboard_id: String, limit := 10, player_id := "") -> Array
 	return scores
 
 
-## Submits a finishing time. The server keeps only each player's best time;
+## Submits the time of a run with its replay, which the server checks against
+## the level: only runs that start at its start, end at its finish and stay
+## out of its floors count. The server keeps only each player's best time;
 ## player_id tells players apart, player_name is what the leaderboard shows.
-## Returns its answer with "best_time_ms", "rank" and "improved", or {} on failure.
-func submit_score(leaderboard_id: String, player_id: String, player_name: String, time_ms: int) -> Dictionary:
-	var body := JSON.stringify({"player_id": player_id, "name": player_name, "time_ms": time_ms})
-	var answer: Variant = await _request(HTTPClient.METHOD_POST, "/v1/levels/%s/scores" % leaderboard_id.uri_encode(), body)
+## Returns its answer with "best_time_ms", "rank" and "improved", or {} on
+## failure. A new best time's replay goes into the level repository, where
+## everyone can watch it from the leaderboard: the answer then has its path as
+## "replay", or why it couldn't go there as "replay_error", in which case
+## submit_replay() can try again.
+func submit_score(leaderboard_id: String, player_id: String, player_name: String, replay: ReplayData) -> Dictionary:
+	var body := "{\"player_id\": %s, \"name\": %s, \"time_ms\": %d, \"replay\": %s}" % [
+			JSON.stringify(player_id), JSON.stringify(player_name), replay.time_ms, replay.to_json()]
+	var answer: Variant = await _request(HTTPClient.METHOD_POST, "/v1/levels/%s/scores" % leaderboard_id.uri_encode(), body, SHARE_TIMEOUT_SECONDS)
 	if answer == null:
 		return {}
 	if not (_is_number(answer.get("best_time_ms")) and _is_number(answer.get("rank"))):
@@ -68,11 +75,12 @@ func submit_score(leaderboard_id: String, player_id: String, player_name: String
 	return answer
 
 
-## Uploads the replay of the player's best time on a level. The server puts it
-## into the level repository, where everyone can watch it from the leaderboard,
-## and removes the player's previous replay of the level. Returns its answer with
-## "path" and "url", or {} on failure; last_status is 409 if the replay isn't of
-## the player's best time.
+## Uploads the replay of the player's best time on a level, for when it
+## couldn't go online with the time. The server puts it into the level
+## repository, where everyone can watch it from the leaderboard, and removes
+## the player's previous replay of the level. Returns its answer with "path"
+## and "url", or {} on failure; last_status is 409 if the replay isn't of the
+## player's best time.
 func submit_replay(leaderboard_id: String, player_id: String, replay: ReplayData) -> Dictionary:
 	var body := "{\"player_id\": %s, \"replay\": %s}" % [JSON.stringify(player_id), replay.to_json()]
 	var answer: Variant = await _request(HTTPClient.METHOD_POST, "/v1/levels/%s/replays" % leaderboard_id.uri_encode(), body, SHARE_TIMEOUT_SECONDS)
@@ -85,6 +93,12 @@ func submit_replay(leaderboard_id: String, player_id: String, replay: ReplayData
 func share_level(level: LevelData) -> Dictionary:
 	var answer: Variant = await _request(HTTPClient.METHOD_POST, "/v1/levels", level.to_json(), SHARE_TIMEOUT_SECONDS)
 	return answer if answer != null else {}
+
+
+## Turns a message from the server, such as "too many scores submitted",
+## into a sentence to show.
+static func as_sentence(message: String) -> String:
+	return message.left(1).to_upper() + message.substr(1) + "."
 
 
 ## Formats a time from the server like the finish screen shows times.
@@ -123,8 +137,7 @@ func _request(method: HTTPClient.Method, path: String, body := "", timeout := TI
 	if last_status < 200 or last_status >= 300:
 		# The server explains its errors as {"error": "..."}.
 		if json is Dictionary and json.get("error") is String and not json["error"].is_empty():
-			var message: String = json["error"]
-			last_error = message.left(1).to_upper() + message.substr(1) + "."
+			last_error = as_sentence(json["error"])
 		else:
 			last_error = "The server answered with error %d." % last_status
 		return null

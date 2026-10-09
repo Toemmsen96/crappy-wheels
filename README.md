@@ -20,7 +20,7 @@ Level 1 and every downloaded level have a leaderboard, kept by the backend. When
 
 **Leaderboards** in the main menu shows the fastest times (up to 100) of Level 1 and of each downloaded level, starting with the level you played last.
 
-A downloaded level's leaderboard is named after its place in the level repository, e.g. `Community-loop` for `Community/loop.json`, so it is the same for every player. Times are whatever the game reports; there are no accounts.
+A downloaded level's leaderboard is named after its place in the level repository, e.g. `Community-loop` for `Community/loop.json`, so it is the same for every player. Every time is sent with the replay of its run, and the backend only takes it if the replay starts at the level's start, ends at the finish and doesn't go through floors or faster than the car can. A new best time's replay goes online straight away, so everyone can watch it from the leaderboard. There are no accounts.
 
 `BackendClient` (`scripts/backend_client.gd`) talks to the backend. The backend's address is not in this repository: the game reads it from `backend.cfg` in the project folder, which git ignores. Copy `backend.cfg.example` to `backend.cfg` and put in the address, e.g. `http://127.0.0.1:8080` for a backend running on your machine. The deploy workflow writes the file from the repository secret `BACKEND_URL` (Settings > Secrets and variables > Actions) and fails if the secret is missing. Without the file the game still runs, and the leaderboards and Share report that no server is set up.
 

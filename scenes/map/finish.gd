@@ -23,11 +23,11 @@ const VISIBLE_SCORES := 4
 @export_group("Replay")
 @export var level_repository: LevelRepository
 @export var watch_replay_button: Button
-## Puts the replay online. Only the replay of the player's best time can go
-## there, so it waits until the leaderboard has the time.
+## Tries again to put the replay online, if that failed when the time was
+## submitted. Hidden otherwise.
 @export var upload_replay_button: Button
 @export var replay_file_button: Button
-## Says how uploading the replay went. Hidden until then.
+## Says how putting the replay online went. Hidden until then.
 @export var replay_status: Label
 
 var _time_ms := 0
@@ -76,7 +76,6 @@ func _on_finishcollider_body_entered(_body: Node) -> void:
 	time_label.text = "Time: %s" % BackendClient.format_time(_time_ms)
 	_save_replay(_body.get_node_or_null("ReplayRecorder") as ReplayRecorder)
 	finish_ui.show()
-	upload_replay_button.visible = GameState.has_leaderboard()
 	if not GameState.has_leaderboard():
 		return
 
@@ -97,10 +96,16 @@ func _submit_time() -> void:
 	if player_name.is_empty():
 		leaderboard_status.text = "Enter a name first."
 		return
+	# The server takes a time only with the replay of the run, which it checks.
+	if _replay == null or not _replay.can_upload():
+		leaderboard_status.text = "This run is too long for the leaderboard." if _replay != null else "This run has no replay, so it can't go on the leaderboard."
+		_load_scores()
+		return
 	GameState.set_player_name(player_name)
 	submit_button.disabled = true
 	leaderboard_status.text = "Submitting your time..."
-	var answer := await backend.submit_score(GameState.leaderboard_id, GameState.ensure_player_id(), player_name, _time_ms)
+	_replay.player_name = player_name
+	var answer := await backend.submit_score(GameState.leaderboard_id, GameState.ensure_player_id(), player_name, _replay)
 	if answer.is_empty():
 		leaderboard_status.text = "Could not submit your time: %s" % backend.last_error
 		submit_button.disabled = false
@@ -108,6 +113,14 @@ func _submit_time() -> void:
 		_load_scores()
 		return
 	_is_best_time = int(answer["best_time_ms"]) == _time_ms
+	if answer.get("replay") is String:
+		_is_uploaded = true
+		_show_replay_status("Your replay is online: everyone can watch it from the leaderboard.")
+	elif answer.get("improved") == true:
+		var error: Variant = answer.get("replay_error")
+		_show_replay_status("Your time counts, but its replay couldn't go online: %s"
+				% (BackendClient.as_sentence(error) if error is String else "unknown error."))
+		upload_replay_button.show()
 	_update_upload_button()
 	var rank := int(answer["rank"])
 	if answer.get("improved") == true:
@@ -135,16 +148,7 @@ func _save_replay(recorder: ReplayRecorder) -> void:
 
 
 func _update_upload_button() -> void:
-	var can_upload := _replay != null and _replay.can_upload() and _is_best_time
-	upload_replay_button.disabled = not can_upload or _is_uploading or _is_uploaded
-	if _replay == null or _is_uploaded or _is_uploading:
-		return
-	if not _replay.can_upload():
-		_show_replay_status("This run is too long to upload its replay.")
-	elif not _is_best_time:
-		_show_replay_status("You were faster before. Only the replay of your best time can be uploaded.")
-	else:
-		_show_replay_status("")
+	upload_replay_button.disabled = _replay == null or not _is_best_time or _is_uploading or _is_uploaded
 
 
 func _upload_replay() -> void:
@@ -159,13 +163,14 @@ func _upload_replay() -> void:
 	if answer.is_empty():
 		var error := backend.last_error
 		if backend.last_status == 409:
-			# Not the best time after all, e.g. beaten on another device meanwhile.
+			# Not the best time anymore, e.g. beaten on another device meanwhile.
 			_is_best_time = false
 		_update_upload_button()
 		_show_replay_status("Could not upload the replay: %s" % error)
 		return
 	_is_uploaded = true
 	_update_upload_button()
+	upload_replay_button.hide()
 	_show_replay_status("Replay uploaded! Everyone can watch it from the leaderboard now.")
 	_load_scores()
 

@@ -97,10 +97,10 @@ tooltip_text = "Watch this run again."
 text = "Watch Replay"
 
 [node name="UploadReplayButton" type="Button" parent="CanvasLayer/Card/VBoxContainer/ReplayRow"]
+visible = false
 layout_mode = 2
-tooltip_text = "Put the replay of this run online, so everyone can watch it from the leaderboard."
-disabled = true
-text = "Upload Replay"
+tooltip_text = "Try again to put the replay of this run online, so everyone can watch it from the leaderboard."
+text = "Retry Upload"
 
 [node name="ReplayFileButton" type="Button" parent="CanvasLayer/Card/VBoxContainer/ReplayRow"]
 layout_mode = 2
