@@ -6,8 +6,8 @@ extends Node
 ## Methods are coroutines: `await` them, then check last_error.
 
 const TIMEOUT_SECONDS := 15.0
-## Sharing waits for the server to push the level to GitHub, after any share
-## that is already in progress.
+## Sharing a level or a replay waits for the server to push it to GitHub,
+## after any upload that is already in progress.
 const SHARE_TIMEOUT_SECONDS := 60.0
 ## Answers are small JSON documents; anything bigger is not from the backend.
 const MAX_RESPONSE_BYTES := 64 * 1024
@@ -33,7 +33,8 @@ func _ready() -> void:
 
 ## Returns the fastest times on a level, best first, as dictionaries with
 ## "rank", "name" and "time_ms". With a player_id, that player's score also
-## has "you" set to true.
+## has "you" set to true. Times with an uploaded replay have its path in the
+## level repository as "replay", for LevelRepository.download_replay().
 func fetch_scores(leaderboard_id: String, limit := 10, player_id := "") -> Array[Dictionary]:
 	var scores: Array[Dictionary] = []
 	var path := "/v1/levels/%s/scores?limit=%d" % [leaderboard_id.uri_encode(), limit]
@@ -47,6 +48,8 @@ func fetch_scores(leaderboard_id: String, limit := 10, player_id := "") -> Array
 		return scores
 	for entry: Variant in answer["scores"]:
 		if entry is Dictionary and entry.get("name") is String and _is_number(entry.get("time_ms")) and _is_number(entry.get("rank")):
+			if not (entry.get("replay") is String and LevelRepository.is_replay_path(entry["replay"])):
+				entry.erase("replay")
 			scores.append(entry)
 	return scores
 
@@ -63,6 +66,17 @@ func submit_score(leaderboard_id: String, player_id: String, player_name: String
 		last_error = "Unexpected answer from the server."
 		return {}
 	return answer
+
+
+## Uploads the replay of the player's best time on a level. The server puts it
+## into the level repository, where everyone can watch it from the leaderboard,
+## and removes the player's previous replay of the level. Returns its answer with
+## "path" and "url", or {} on failure; last_status is 409 if the replay isn't of
+## the player's best time.
+func submit_replay(leaderboard_id: String, player_id: String, replay: ReplayData) -> Dictionary:
+	var body := "{\"player_id\": %s, \"replay\": %s}" % [JSON.stringify(player_id), replay.to_json()]
+	var answer: Variant = await _request(HTTPClient.METHOD_POST, "/v1/levels/%s/replays" % leaderboard_id.uri_encode(), body, SHARE_TIMEOUT_SECONDS)
+	return answer if answer != null else {}
 
 
 ## Shares a level with everyone: the server adds it to the Community folder of

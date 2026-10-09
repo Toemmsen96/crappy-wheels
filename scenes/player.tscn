@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://66dumd072w4u" path="res://scenes/ui.tscn" id="4_dqkch"]
 [ext_resource type="PackedScene" uid="uid://c4vlhc3pqkb8d" path="res://scenes/ui/pause_menu.tscn" id="5_qlg0r"]
 [ext_resource type="AudioStream" uid="uid://bo31d24gpdou8" path="res://assets/audio/wroo_loop.wav" id="6_engine"]
+[ext_resource type="Script" path="res://scripts/replay_recorder.gd" id="7_recorder"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kuy6b"]
 
@@ -121,3 +122,9 @@ stream = ExtResource("6_engine")
 volume_db = -8.0
 pitch_scale = 0.8
 autoplay = true
+
+[node name="ReplayRecorder" type="Node" parent="." node_paths=PackedStringArray("car", "front_wheel", "rear_wheel")]
+script = ExtResource("7_recorder")
+car = NodePath("..")
+front_wheel = NodePath("../PinJointFront/WheelFront")
+rear_wheel = NodePath("../PinJointRear/WheelRear")

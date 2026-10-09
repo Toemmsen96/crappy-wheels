@@ -3,8 +3,9 @@
 [ext_resource type="Script" uid="uid://dmntkklt7brr1" path="res://scenes/ui/leaderboards.gd" id="1_leaderboards"]
 [ext_resource type="Script" uid="uid://cism81ln01agx" path="res://scripts/backend_client.gd" id="2_backend"]
 [ext_resource type="Script" uid="uid://cf0j8i8nap5f0" path="res://scenes/ui/score_list.gd" id="3_scores"]
+[ext_resource type="Script" path="res://scripts/level_repository.gd" id="4_repository"]
 
-[node name="Leaderboards" type="CanvasLayer" node_paths=PackedStringArray("backend", "level_picker", "refresh_button", "status_label", "score_scroll", "score_list")]
+[node name="Leaderboards" type="CanvasLayer" node_paths=PackedStringArray("backend", "level_picker", "refresh_button", "status_label", "score_scroll", "score_list", "level_repository")]
 script = ExtResource("1_leaderboards")
 backend = NodePath("BackendClient")
 level_picker = NodePath("MarginContainer/VBoxContainer/Actions/LevelPicker")
@@ -12,9 +13,13 @@ refresh_button = NodePath("MarginContainer/VBoxContainer/Actions/RefreshButton")
 status_label = NodePath("MarginContainer/VBoxContainer/StatusLabel")
 score_scroll = NodePath("MarginContainer/VBoxContainer/ScrollContainer")
 score_list = NodePath("MarginContainer/VBoxContainer/ScrollContainer/ScoreList")
+level_repository = NodePath("LevelRepository")
 
 [node name="BackendClient" type="Node" parent="."]
 script = ExtResource("2_backend")
+
+[node name="LevelRepository" type="Node" parent="."]
+script = ExtResource("4_repository")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -69,7 +74,7 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 24
-columns = 3
+columns = 4
 script = ExtResource("3_scores")
 
 [node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer"]

@@ -38,6 +38,19 @@ static func list_levels(dir_path := LEVELS_DIR) -> Array[LevelData]:
 	return levels
 
 
+## Returns the level with this id in `dir_path`, or null if there is none.
+static func load_level(id: String, dir_path := LEVELS_DIR) -> LevelData:
+	if not LevelData.is_valid_id(id):
+		return null
+	var path := dir_path.path_join("%s.%s" % [id, FILE_EXTENSION])
+	if not FileAccess.file_exists(path):
+		return null
+	var level := LevelData.from_json(FileAccess.get_file_as_string(path))
+	if level != null:
+		level.id = id
+	return level
+
+
 static func save_level(level: LevelData, dir_path := LEVELS_DIR) -> Error:
 	var error := DirAccess.make_dir_recursive_absolute(dir_path)
 	if error != OK:

@@ -1,3 +1,4 @@
+class_name Player
 extends RigidBody2D
 
 const SPEED_MULTIPLIER := 15.0
@@ -97,6 +98,13 @@ func _on_boost_just_pressed() -> void:
 	_boost_held = true
 	Sfx.play(Sfx.WEEE)
 func _on_boost_released() -> void: _boost_held = false
+
+
+## The controls held right now, as ReplayData's control bits.
+func held_controls() -> int:
+	return ((ReplayData.UP if _up_held else 0) | (ReplayData.DOWN if _down_held else 0)
+			| (ReplayData.LEFT if _left_held else 0) | (ReplayData.RIGHT if _right_held else 0)
+			| (ReplayData.BOOST if _boost_held else 0))
 
 
 func _process(delta: float) -> void:

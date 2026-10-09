@@ -14,6 +14,11 @@ var testing_in_builder := false
 var leaderboard_id := ""
 ## Name the player's times are submitted under. Remembered in SETTINGS_PATH.
 var player_name := ""
+## What the replay viewer plays: the replay, the level it was recorded on
+## (null for Level 1) and the scene to go back to afterwards.
+var replay: ReplayData = null
+var replay_level: LevelData = null
+var replay_return_scene := ""
 ## Tells this player's times apart from those of others with the same name.
 ## Made on the first submitted time and remembered in SETTINGS_PATH, which the
 ## web build keeps in the browser's storage for the site. Empty until then.
@@ -67,6 +72,15 @@ func _save_player_setting(key: String, value: Variant) -> void:
 	var error := settings.save(SETTINGS_PATH)
 	if error != OK:
 		push_warning("Could not save the player %s: %s" % [key, error_string(error)])
+
+
+## Opens the replay viewer on `replay_to_watch`, recorded on `level` (null for
+## Level 1). Its Back button goes to `return_scene`.
+func watch_replay(replay_to_watch: ReplayData, level: LevelData, return_scene: String) -> void:
+	replay = replay_to_watch
+	replay_level = level
+	replay_return_scene = return_scene
+	get_tree().change_scene_to_file(ScenePaths.REPLAY_VIEWER)
 
 
 ## Whether the level being played has a leaderboard to submit times to.

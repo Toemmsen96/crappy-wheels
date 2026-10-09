@@ -4,11 +4,12 @@
 [ext_resource type="Script" uid="uid://3p1lr2qqn81r" path="res://scenes/map/finish.gd" id="1_07gpw"]
 [ext_resource type="Script" uid="uid://cism81ln01agx" path="res://scripts/backend_client.gd" id="2_backend"]
 [ext_resource type="Script" uid="uid://cf0j8i8nap5f0" path="res://scenes/ui/score_list.gd" id="3_scores"]
+[ext_resource type="Script" path="res://scripts/level_repository.gd" id="4_repository"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kuy6b"]
 size = Vector2(83, 45.5)
 
-[node name="Finish" type="Node2D" unique_id=1487630266 node_paths=PackedStringArray("finishcollider", "time_label", "finish_ui", "backend", "leaderboard_section", "score_message", "score_scroll", "score_list", "name_edit", "submit_button", "leaderboard_status", "return_button")]
+[node name="Finish" type="Node2D" unique_id=1487630266 node_paths=PackedStringArray("finishcollider", "time_label", "finish_ui", "backend", "leaderboard_section", "score_message", "score_scroll", "score_list", "name_edit", "submit_button", "leaderboard_status", "return_button", "level_repository", "watch_replay_button", "upload_replay_button", "replay_file_button", "replay_status")]
 script = ExtResource("1_07gpw")
 finishcollider = NodePath("Area2D")
 time_label = NodePath("CanvasLayer/Card/VBoxContainer/Time")
@@ -22,9 +23,17 @@ name_edit = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/NameRow/
 submit_button = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/NameRow/SubmitButton")
 leaderboard_status = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/LeaderboardStatus")
 return_button = NodePath("CanvasLayer/Card/VBoxContainer/ReturnToMenu")
+level_repository = NodePath("LevelRepository")
+watch_replay_button = NodePath("CanvasLayer/Card/VBoxContainer/ReplayRow/WatchReplayButton")
+upload_replay_button = NodePath("CanvasLayer/Card/VBoxContainer/ReplayRow/UploadReplayButton")
+replay_file_button = NodePath("CanvasLayer/Card/VBoxContainer/ReplayRow/ReplayFileButton")
+replay_status = NodePath("CanvasLayer/Card/VBoxContainer/ReplayStatus")
 
 [node name="BackendClient" type="Node" parent="."]
 script = ExtResource("2_backend")
+
+[node name="LevelRepository" type="Node" parent="."]
+script = ExtResource("4_repository")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1345871448]
 collision_mask = 2
@@ -78,6 +87,32 @@ layout_mode = 2
 text = "XX"
 horizontal_alignment = 1
 
+[node name="ReplayRow" type="HBoxContainer" parent="CanvasLayer/Card/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="WatchReplayButton" type="Button" parent="CanvasLayer/Card/VBoxContainer/ReplayRow"]
+layout_mode = 2
+tooltip_text = "Watch this run again."
+text = "Watch Replay"
+
+[node name="UploadReplayButton" type="Button" parent="CanvasLayer/Card/VBoxContainer/ReplayRow"]
+layout_mode = 2
+tooltip_text = "Put the replay of this run online, so everyone can watch it from the leaderboard."
+disabled = true
+text = "Upload Replay"
+
+[node name="ReplayFileButton" type="Button" parent="CanvasLayer/Card/VBoxContainer/ReplayRow"]
+layout_mode = 2
+tooltip_text = "Every finished run is saved as a text file. This shows where."
+text = "Replay File"
+
+[node name="ReplayStatus" type="Label" parent="CanvasLayer/Card/VBoxContainer"]
+visible = false
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 3
+
 [node name="LeaderboardSection" type="VBoxContainer" parent="CanvasLayer/Card/VBoxContainer"]
 layout_mode = 2
 
@@ -102,7 +137,7 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 24
-columns = 3
+columns = 4
 script = ExtResource("3_scores")
 
 [node name="NameRow" type="HBoxContainer" parent="CanvasLayer/Card/VBoxContainer/LeaderboardSection"]

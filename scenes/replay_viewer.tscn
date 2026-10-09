@@ -1,0 +1,87 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/replay/replay_viewer.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/replay_car.tscn" id="2_car"]
+[ext_resource type="AudioStream" uid="uid://bo31d24gpdou8" path="res://assets/audio/wroo_loop.wav" id="3_engine"]
+
+[node name="ReplayViewer" type="Node2D" node_paths=PackedStringArray("car", "engine_sound", "title_label", "time_label", "time_slider", "play_button", "restart_button", "speed_button", "back_button")]
+script = ExtResource("1_script")
+car = NodePath("ReplayCar")
+engine_sound = NodePath("Engine")
+title_label = NodePath("HUD/Bar/Margin/Rows/Title")
+time_label = NodePath("HUD/Bar/Margin/Rows/Controls/TimeLabel")
+time_slider = NodePath("HUD/Bar/Margin/Rows/Controls/TimeSlider")
+play_button = NodePath("HUD/Bar/Margin/Rows/Controls/PlayButton")
+restart_button = NodePath("HUD/Bar/Margin/Rows/Controls/RestartButton")
+speed_button = NodePath("HUD/Bar/Margin/Rows/Controls/SpeedButton")
+back_button = NodePath("HUD/Bar/Margin/Rows/Controls/BackButton")
+
+[node name="ReplayCar" parent="." instance=ExtResource("2_car")]
+
+[node name="Engine" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_engine")
+volume_db = -60.0
+pitch_scale = 0.8
+autoplay = true
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Bar" type="PanelContainer" parent="HUD"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Margin" type="MarginContainer" parent="HUD/Bar"]
+layout_mode = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 15
+
+[node name="Rows" type="VBoxContainer" parent="HUD/Bar/Margin"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="HUD/Bar/Margin/Rows"]
+layout_mode = 2
+text = "Replay"
+text_overrun_behavior = 3
+
+[node name="Controls" type="HBoxContainer" parent="HUD/Bar/Margin/Rows"]
+layout_mode = 2
+
+[node name="PlayButton" type="Button" parent="HUD/Bar/Margin/Rows/Controls"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+focus_mode = 0
+text = "Pause"
+
+[node name="RestartButton" type="Button" parent="HUD/Bar/Margin/Rows/Controls"]
+layout_mode = 2
+focus_mode = 0
+text = "Restart"
+
+[node name="SpeedButton" type="Button" parent="HUD/Bar/Margin/Rows/Controls"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+focus_mode = 0
+tooltip_text = "Playback speed"
+text = "1x"
+
+[node name="TimeSlider" type="HSlider" parent="HUD/Bar/Margin/Rows/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_mode = 0
+scrollable = false
+
+[node name="TimeLabel" type="Label" parent="HUD/Bar/Margin/Rows/Controls"]
+layout_mode = 2
+text = "0.000 s / 0.000 s"
+
+[node name="BackButton" type="Button" parent="HUD/Bar/Margin/Rows/Controls"]
+layout_mode = 2
+focus_mode = 0
+text = "Back"

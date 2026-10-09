@@ -13,6 +13,8 @@ const FOLDERS: Array[String] = ["Base", "Community"]
 const MAX_LEVEL_BYTES := 1024 * 1024
 ## The file tree lists every file in the repository, so it gets more room.
 const MAX_TREE_BYTES := 8 * 1024 * 1024
+## The backend takes replays up to 1 MiB.
+const MAX_REPLAY_BYTES := 2 * 1024 * 1024
 const TIMEOUT_SECONDS := 15.0
 
 ## GitHub repository to read levels from. Point these at a fork to test level submissions.
@@ -22,6 +24,9 @@ const TIMEOUT_SECONDS := 15.0
 
 ## Why the last call failed, or empty if it succeeded.
 var last_error := ""
+
+## Replays are uploaded by the backend to Replays/<level>/<random hex>.json.
+static var _replay_path_regex := RegEx.create_from_string("^Replays/[A-Za-z0-9_-]{1,64}/[0-9a-f]{1,64}\\.json$")
 
 
 ## Returns the repository paths of all levels, e.g. "Community/loop.json", sorted.
@@ -64,6 +69,27 @@ func download_level(path: String) -> LevelData:
 		return null
 	level.id = download_id(path)
 	return level
+
+
+## Downloads the replay at `path`, which a leaderboard names. Returns null on failure.
+func download_replay(path: String) -> ReplayData:
+	last_error = ""
+	if not is_replay_path(path):
+		last_error = "Not a replay."
+		return null
+	var url := "https://raw.githubusercontent.com/%s/%s/%s/%s" % [repo_owner, repository, branch, path]
+	var body: Variant = await _http_get(url, MAX_REPLAY_BYTES)
+	if body == null:
+		return null
+	var replay := ReplayData.from_json(body.get_string_from_utf8())
+	if replay == null:
+		last_error = "Not a valid replay file."
+	return replay
+
+
+## Whether `path` is where the backend puts replays, so it is safe to put into a URL.
+static func is_replay_path(path: String) -> bool:
+	return _replay_path_regex.search(path) != null
 
 
 ## The id a downloaded level is saved under, based on where it is in the repository,

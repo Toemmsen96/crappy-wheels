@@ -20,8 +20,24 @@ const VISIBLE_SCORES := 4
 @export var submit_button: Button
 @export var leaderboard_status: Label
 @export var return_button: Button
+@export_group("Replay")
+@export var level_repository: LevelRepository
+@export var watch_replay_button: Button
+## Puts the replay online. Only the replay of the player's best time can go
+## there, so it waits until the leaderboard has the time.
+@export var upload_replay_button: Button
+@export var replay_file_button: Button
+## Says how uploading the replay went. Hidden until then.
+@export var replay_status: Label
 
 var _time_ms := 0
+## The run that just finished, and where it was saved, or "" if saving failed.
+var _replay: ReplayData = null
+var _replay_file := ""
+## Whether the leaderboard holds this run's time as the player's best.
+var _is_best_time := false
+var _is_uploading := false
+var _is_uploaded := false
 
 
 # Called when the node enters the scene tree for the first time.
@@ -34,6 +50,13 @@ func _ready() -> void:
 	# Changing the name allows submitting the time under the new one.
 	name_edit.text_changed.connect(func(_text: String) -> void: submit_button.disabled = false)
 	submit_button.pressed.connect(_submit_time)
+	watch_replay_button.pressed.connect(_watch_own_replay)
+	upload_replay_button.pressed.connect(_upload_replay)
+	replay_file_button.pressed.connect(func() -> void: ReplayLibrary.export_replay(_replay_file))
+	score_list.replay_requested.connect(_watch_leaderboard_replay)
+	# Until the run has a replay.
+	watch_replay_button.disabled = true
+	replay_file_button.disabled = true
 	if GameState.testing_in_builder:
 		return_button.text = "Back to Level Builder"
 
@@ -51,7 +74,9 @@ func _on_finishcollider_body_entered(_body: Node) -> void:
 	# Rounded like the time that goes to the leaderboard, so both show the same.
 	_time_ms = roundi(GameState.time_elapsed * 1000.0)
 	time_label.text = "Time: %s" % BackendClient.format_time(_time_ms)
+	_save_replay(_body.get_node_or_null("ReplayRecorder") as ReplayRecorder)
 	finish_ui.show()
+	upload_replay_button.visible = GameState.has_leaderboard()
 	if not GameState.has_leaderboard():
 		return
 
@@ -82,12 +107,95 @@ func _submit_time() -> void:
 		# The board is still worth showing, e.g. after submitting too often.
 		_load_scores()
 		return
+	_is_best_time = int(answer["best_time_ms"]) == _time_ms
+	_update_upload_button()
 	var rank := int(answer["rank"])
 	if answer.get("improved") == true:
 		leaderboard_status.text = "New best time for %s! Rank %d." % [player_name, rank]
 	else:
 		leaderboard_status.text = "%s's best is still %s, rank %d." % [player_name, BackendClient.format_time(answer["best_time_ms"]), rank]
 	_load_scores()
+
+
+## Takes the replay from the car's recorder and saves it as a file.
+func _save_replay(recorder: ReplayRecorder) -> void:
+	if recorder == null:
+		return
+	_replay = recorder.finish(_time_ms)
+	var level := _played_level()
+	if GameState.has_leaderboard() or level == null:
+		_replay.level_id = GameState.leaderboard_id if not GameState.leaderboard_id.is_empty() else GameState.LEVEL1_LEADERBOARD
+	else:
+		_replay.level_id = level.id
+	_replay.level_name = level.name if level != null else "Level 1"
+	_replay.player_name = GameState.player_name
+	_replay_file = ReplayLibrary.save_replay(_replay)
+	watch_replay_button.disabled = false
+	replay_file_button.disabled = _replay_file.is_empty()
+
+
+func _update_upload_button() -> void:
+	var can_upload := _replay != null and _replay.can_upload() and _is_best_time
+	upload_replay_button.disabled = not can_upload or _is_uploading or _is_uploaded
+	if _replay == null or _is_uploaded or _is_uploading:
+		return
+	if not _replay.can_upload():
+		_show_replay_status("This run is too long to upload its replay.")
+	elif not _is_best_time:
+		_show_replay_status("You were faster before. Only the replay of your best time can be uploaded.")
+	else:
+		_show_replay_status("")
+
+
+func _upload_replay() -> void:
+	if upload_replay_button.disabled:
+		return
+	_is_uploading = true
+	_update_upload_button()
+	_show_replay_status("Uploading the replay...")
+	_replay.player_name = GameState.player_name
+	var answer := await backend.submit_replay(GameState.leaderboard_id, GameState.ensure_player_id(), _replay)
+	_is_uploading = false
+	if answer.is_empty():
+		var error := backend.last_error
+		if backend.last_status == 409:
+			# Not the best time after all, e.g. beaten on another device meanwhile.
+			_is_best_time = false
+		_update_upload_button()
+		_show_replay_status("Could not upload the replay: %s" % error)
+		return
+	_is_uploaded = true
+	_update_upload_button()
+	_show_replay_status("Replay uploaded! Everyone can watch it from the leaderboard now.")
+	_load_scores()
+
+
+func _watch_own_replay() -> void:
+	if _replay != null:
+		GameState.watch_replay(_replay, _played_level(), get_tree().current_scene.scene_file_path)
+
+
+func _watch_leaderboard_replay(replay_path: String) -> void:
+	score_list.set_watch_disabled(true)
+	leaderboard_status.text = "Loading the replay..."
+	var replay := await level_repository.download_replay(replay_path)
+	if replay == null:
+		leaderboard_status.text = "Could not load the replay: %s" % level_repository.last_error
+		score_list.set_watch_disabled(false)
+		return
+	GameState.watch_replay(replay, _played_level(), get_tree().current_scene.scene_file_path)
+
+
+## The builder level being played, or null for Level 1, which is a scene of its own.
+func _played_level() -> LevelData:
+	if get_tree().current_scene.scene_file_path == ScenePaths.CUSTOM_LEVEL:
+		return GameState.current_level
+	return null
+
+
+func _show_replay_status(text: String) -> void:
+	replay_status.text = text
+	replay_status.visible = not text.is_empty()
 
 
 func _load_scores() -> void:

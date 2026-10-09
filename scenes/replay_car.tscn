@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/replay/replay_car.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://c8dlwfrdskukc" path="res://assets/carbody.png" id="2_body"]
+[ext_resource type="Texture2D" uid="uid://cflpq3daw5joa" path="res://assets/wheel.png" id="3_wheel"]
+
+[node name="ReplayCar" type="Node2D" node_paths=PackedStringArray("front_wheel", "rear_wheel")]
+script = ExtResource("1_script")
+front_wheel = NodePath("WheelFront")
+rear_wheel = NodePath("WheelRear")
+
+[node name="WheelFront" type="Node2D" parent="."]
+position = Vector2(10, 7)
+
+[node name="TextureRect" type="TextureRect" parent="WheelFront"]
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 34.0
+offset_bottom = 34.0
+scale = Vector2(0.3137462, 0.3137462)
+mouse_filter = 2
+texture = ExtResource("3_wheel")
+expand_mode = 2
+
+[node name="WheelRear" type="Node2D" parent="."]
+position = Vector2(-9, 7)
+
+[node name="TextureRect" type="TextureRect" parent="WheelRear"]
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 34.0
+offset_bottom = 34.0
+scale = Vector2(0.3137462, 0.3137462)
+mouse_filter = 2
+texture = ExtResource("3_wheel")
+expand_mode = 2
+
+[node name="Body" type="TextureRect" parent="."]
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("2_body")
+expand_mode = 2
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
