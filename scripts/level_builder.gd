@@ -23,6 +23,18 @@ const SNAPPED_ANGLE_STEP := 15.0
 const FREE_ANGLE_STEP := 1.0
 ## R/F multiply or divide the size by this.
 const RESIZE_FACTOR := 1.1
+## Ctrl+D puts the copies this far from the originals, so both can be seen.
+const DUPLICATE_OFFSET := Vector2(GRID_SIZE, GRID_SIZE) * 2.0
+## The number keys pick the tools in the order of the toolbar.
+const TOOL_KEYS := {
+	KEY_1: MapBuilderUI.Tool.SELECT, KEY_KP_1: MapBuilderUI.Tool.SELECT,
+	KEY_2: MapBuilderUI.Tool.FLOOR, KEY_KP_2: MapBuilderUI.Tool.FLOOR,
+	KEY_3: MapBuilderUI.Tool.BALL, KEY_KP_3: MapBuilderUI.Tool.BALL,
+	KEY_4: MapBuilderUI.Tool.BOOST, KEY_KP_4: MapBuilderUI.Tool.BOOST,
+	KEY_5: MapBuilderUI.Tool.START, KEY_KP_5: MapBuilderUI.Tool.START,
+	KEY_6: MapBuilderUI.Tool.FINISH, KEY_KP_6: MapBuilderUI.Tool.FINISH,
+	KEY_7: MapBuilderUI.Tool.ERASE, KEY_KP_7: MapBuilderUI.Tool.ERASE,
+}
 # Size slider ranges for common sizes. Typing in the size box goes further, up to the LevelData limits.
 const FLOOR_LENGTH_SLIDER_MIN := 10.0
 const FLOOR_LENGTH_SLIDER_MAX := 1000.0
@@ -90,6 +102,8 @@ var _is_box_selecting := false
 var _box_start := Vector2.ZERO
 # What was selected when a box was started with Shift held, which stays selected.
 var _box_kept: Array[Node2D] = []
+# Objects copied with Ctrl+C, as {"kind": Kind, "data": Dictionary}, for Ctrl+V.
+var _clipboard: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -143,7 +157,9 @@ func _process(delta: float) -> void:
 		else:
 			_is_moving = false
 
-	if not ui.is_dialog_open and not (get_viewport().gui_get_focus_owner() is LineEdit):
+	# Ctrl is held for shortcuts like Ctrl+S, whose letters also pan.
+	if not ui.is_dialog_open and not (get_viewport().gui_get_focus_owner() is LineEdit) \
+			and not Input.is_key_pressed(KEY_CTRL) and not Input.is_key_pressed(KEY_META):
 		var direction := Input.get_vector(Inputs.MOVE_LEFT, Inputs.MOVE_RIGHT, Inputs.MOVE_UP, Inputs.MOVE_DOWN)
 		camera.position += direction * PAN_SPEED * delta / camera.zoom.x
 
@@ -166,6 +182,9 @@ func _unhandled_input(event: InputEvent) -> void:
 				_zoom_at(mouse_button.position, 1.0 / ZOOM_STEP)
 			MOUSE_BUTTON_LEFT:
 				get_viewport().gui_release_focus()
+				# Shift selects from every tool, so picking objects doesn't need a trip to the toolbar.
+				if mouse_button.shift_pressed and _tool != MapBuilderUI.Tool.SELECT:
+					ui.select_tool(MapBuilderUI.Tool.SELECT)
 				_use_tool(get_global_mouse_position(), mouse_button.shift_pressed)
 	elif mouse_motion and mouse_motion.button_mask & (MOUSE_BUTTON_MASK_RIGHT | MOUSE_BUTTON_MASK_MIDDLE):
 		camera.position -= mouse_motion.relative / camera.zoom
@@ -182,8 +201,23 @@ func _handle_key(key: InputEventKey) -> void:
 				if _tool != MapBuilderUI.Tool.SELECT:
 					return
 				_select(_all_objects())
+			KEY_C:
+				_copy()
+			KEY_V:
+				_paste()
+			KEY_D:
+				if _selected.is_empty():
+					return
+				_copy()
+				_add_copies(DUPLICATE_OFFSET)
+			KEY_S:
+				_save()
+			KEY_ENTER, KEY_KP_ENTER:
+				_test()
 			_:
 				return
+	elif TOOL_KEYS.has(key.keycode):
+		ui.select_tool(TOOL_KEYS[key.keycode])
 	else:
 		var angle_step := deg_to_rad(SNAPPED_ANGLE_STEP if ui.snap_enabled else FREE_ANGLE_STEP)
 		match key.keycode:
@@ -197,6 +231,11 @@ func _handle_key(key: InputEventKey) -> void:
 				_edit_settings_targets(_resize_by.bind(1.0 / RESIZE_FACTOR))
 			KEY_C:
 				_toggle_collision()
+			KEY_G:
+				ui.snap_enabled = not ui.snap_enabled
+				ui.show_status("Snapping to the grid is %s." % ("on" if ui.snap_enabled else "off"))
+			KEY_HOME:
+				camera.position = _level.start
 			KEY_DELETE, KEY_BACKSPACE:
 				if _selected.is_empty():
 					return
@@ -409,6 +448,51 @@ func _rect_polygon(center: Vector2, angle: float, size: Vector2) -> PackedVector
 	return polygon
 
 
+## Copies the selected objects for _paste().
+func _copy() -> void:
+	if _selected.is_empty():
+		return
+	_clipboard.clear()
+	for node in _selected:
+		_clipboard.append({"kind": _kind_of(node), "data": _data_of(node).duplicate(true)})
+	ui.show_status("Copied %d object%s." % [_clipboard.size(), "" if _clipboard.size() == 1 else "s"])
+
+
+## Adds the copied objects around the mouse, keeping how they lie to each other.
+func _paste() -> void:
+	if _clipboard.is_empty():
+		return
+	var center := Vector2.ZERO
+	for copy in _clipboard:
+		center += copy["data"]["position"]
+	center /= _clipboard.size()
+	# Snapping the distance moved keeps copies that sit between grid points aligned, like moving them does.
+	_add_copies(_snap(get_global_mouse_position() - center))
+
+
+## Adds the copied objects moved by `offset`, and selects them so they can be moved on.
+func _add_copies(offset: Vector2) -> void:
+	var nodes: Array[Node2D] = []
+	for copy in _clipboard:
+		var data: Dictionary = copy["data"].duplicate(true)
+		data["position"] += offset
+		var node: Node2D
+		match copy["kind"]:
+			Kind.TILE:
+				node = _add_tile(data)
+			Kind.BALL:
+				node = _add_ball(data)
+			Kind.BOOST:
+				node = _add_boost(data)
+		if node == null:
+			break # The level is full.
+		nodes.append(node)
+	if nodes.is_empty():
+		return
+	ui.select_tool(MapBuilderUI.Tool.SELECT)
+	_select(nodes)
+
+
 func _all_objects() -> Array[Node2D]:
 	var nodes: Array[Node2D] = []
 	nodes.append_array(_tile_nodes)
@@ -601,28 +685,37 @@ func _data_of(node: Node2D) -> Dictionary:
 	return _level.boosts[_boost_nodes.find(node)]
 
 
-func _add_tile(tile: Dictionary) -> void:
+## Adds a floor to the level and returns its node, or null if the level is full.
+func _add_tile(tile: Dictionary) -> Node2D:
 	if not _has_room_for_object():
-		return
+		return null
 	_level.tiles.append(tile)
-	_placed_nodes.append(_spawn_tile_node(tile))
+	var node := _spawn_tile_node(tile)
+	_placed_nodes.append(node)
 	_mark_changed()
+	return node
 
 
-func _add_ball(ball: Dictionary) -> void:
+## Adds a ball to the level and returns its node, or null if the level is full.
+func _add_ball(ball: Dictionary) -> Node2D:
 	if not _has_room_for_object():
-		return
+		return null
 	_level.balls.append(ball)
-	_placed_nodes.append(_spawn_ball_node(ball))
+	var node := _spawn_ball_node(ball)
+	_placed_nodes.append(node)
 	_mark_changed()
+	return node
 
 
-func _add_boost(boost: Dictionary) -> void:
+## Adds a boost to the level and returns its node, or null if the level is full.
+func _add_boost(boost: Dictionary) -> Node2D:
 	if not _has_room_for_object():
-		return
+		return null
 	_level.boosts.append(boost)
-	_placed_nodes.append(_spawn_boost_node(boost))
+	var node := _spawn_boost_node(boost)
+	_placed_nodes.append(node)
 	_mark_changed()
+	return node
 
 
 func _spawn_tile_node(tile: Dictionary) -> Node2D:

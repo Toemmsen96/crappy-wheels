@@ -25,7 +25,7 @@ const TOOL_HINTS := {
 	Tool.FINISH: "Finish: click to move the finish flag.",
 	Tool.ERASE: "Erase: click a floor, ball or boost to remove it.",
 }
-const CONTROLS_HINT := "Q/E rotate, R/F resize, C toggles collision. Right-drag or WASD/arrows to pan, mouse wheel to zoom, Ctrl+Z to undo. Esc pauses a test run."
+const CONTROLS_HINT := "1-7 pick a tool, G toggles snapping, Shift-click or Shift-drag selects from any tool. Q/E rotate, R/F resize, C toggles collision. Ctrl+C/Ctrl+V copy and paste at the mouse, Ctrl+D duplicates, Ctrl+Z undoes. Ctrl+S saves, Ctrl+Enter tests. Right-drag or WASD/arrows to pan, mouse wheel to zoom, Home goes back to the start. Esc pauses a test run."
 const SAVE_AND_LEAVE_ACTION := "save_and_leave"
 
 @export var select_button: Button
@@ -68,6 +68,8 @@ const SAVE_AND_LEAVE_ACTION := "save_and_leave"
 var snap_enabled: bool:
 	get:
 		return snap_check.button_pressed
+	set(value):
+		snap_check.button_pressed = value
 
 var level_name: String:
 	get:
@@ -80,19 +82,27 @@ var is_dialog_open: bool:
 	get:
 		return unsaved_dialog.visible
 
+var _tool_buttons: Dictionary[Tool, Button] = {}
+
 
 func _ready() -> void:
-	var tool_buttons := {
-		select_button: Tool.SELECT,
-		floor_button: Tool.FLOOR,
-		ball_button: Tool.BALL,
-		boost_button: Tool.BOOST,
-		start_button: Tool.START,
-		finish_button: Tool.FINISH,
-		erase_button: Tool.ERASE,
+	_tool_buttons = {
+		Tool.SELECT: select_button,
+		Tool.FLOOR: floor_button,
+		Tool.BALL: ball_button,
+		Tool.BOOST: boost_button,
+		Tool.START: start_button,
+		Tool.FINISH: finish_button,
+		Tool.ERASE: erase_button,
 	}
-	for button: Button in tool_buttons:
-		button.pressed.connect(_on_tool_button_pressed.bind(tool_buttons[button]))
+	for tool: Tool in _tool_buttons:
+		var button := _tool_buttons[tool]
+		button.pressed.connect(_on_tool_button_pressed.bind(tool))
+		# The number keys pick the tools in the order of the buttons.
+		button.tooltip_text = "%s (%d)" % [TOOL_HINTS[tool].get_slice(":", 0), tool + 1]
+	snap_check.tooltip_text = "Snap to the grid (G)"
+	save_button.tooltip_text = "Save (Ctrl+S)"
+	test_button.tooltip_text = "Test (Ctrl+Enter)"
 	name_edit.max_length = LevelData.MAX_NAME_LENGTH
 	name_edit.text_changed.connect(func(new_text: String) -> void:
 		level_name_changed.emit(new_text.strip_edges()))
@@ -112,6 +122,12 @@ func _ready() -> void:
 	strength_input.value_changed.connect(strength_changed.emit)
 	hide_settings()
 	_show_hint(Tool.FLOOR)
+
+
+## Picks a tool as if its button was pressed.
+func select_tool(tool: Tool) -> void:
+	_tool_buttons[tool].button_pressed = true
+	_on_tool_button_pressed(tool)
 
 
 func show_status(text: String) -> void:
