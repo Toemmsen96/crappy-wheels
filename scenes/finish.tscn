@@ -22,7 +22,7 @@ score_list = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/ScoreSc
 name_edit = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/NameRow/NameEdit")
 submit_button = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/NameRow/SubmitButton")
 leaderboard_status = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/LeaderboardStatus")
-return_button = NodePath("CanvasLayer/Card/VBoxContainer/ReturnToMenu")
+return_button = NodePath("CanvasLayer/Card/VBoxContainer/ActionRow/ReturnToMenu")
 level_repository = NodePath("LevelRepository")
 watch_replay_button = NodePath("CanvasLayer/Card/VBoxContainer/ReplayRow/WatchReplayButton")
 upload_replay_button = NodePath("CanvasLayer/Card/VBoxContainer/ReplayRow/UploadReplayButton")
@@ -161,13 +161,18 @@ layout_mode = 2
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="ReturnToMenu" type="Button" parent="CanvasLayer/Card/VBoxContainer" unique_id=72619692]
+[node name="ActionRow" type="HBoxContainer" parent="CanvasLayer/Card/VBoxContainer"]
 layout_mode = 2
-text = "Return to Menu"
 
-[node name="Restart" type="Button" parent="CanvasLayer/Card/VBoxContainer" unique_id=1344728293]
+[node name="Restart" type="Button" parent="CanvasLayer/Card/VBoxContainer/ActionRow" unique_id=1344728293]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Restart Level"
 
-[connection signal="pressed" from="CanvasLayer/Card/VBoxContainer/ReturnToMenu" to="." method="_on_ReturnToMenuButton_pressed"]
-[connection signal="pressed" from="CanvasLayer/Card/VBoxContainer/Restart" to="." method="_on_RestartButton_pressed"]
+[node name="ReturnToMenu" type="Button" parent="CanvasLayer/Card/VBoxContainer/ActionRow" unique_id=72619692]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Return to Menu"
+
+[connection signal="pressed" from="CanvasLayer/Card/VBoxContainer/ActionRow/ReturnToMenu" to="." method="_on_ReturnToMenuButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Card/VBoxContainer/ActionRow/Restart" to="." method="_on_RestartButton_pressed"]

@@ -211,7 +211,7 @@ func _load_scores() -> void:
 		return
 
 	var rows := mini(scores.size(), VISIBLE_SCORES)
-	var row_height: float = score_list.get_child(-1).get_combined_minimum_size().y
+	var row_height := score_list.row_height()
 	score_scroll.custom_minimum_size.y = rows * row_height + (rows - 1) * score_list.get_theme_constant("v_separation")
 	if own_row != null:
 		# Deferred, so the new rows have their places by then.
