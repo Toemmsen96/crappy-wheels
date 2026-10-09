@@ -16,66 +16,66 @@
 [node name="Start1" parent="Ground" unique_id=857876999 instance=ExtResource("1_tile")]
 position = Vector2(-90, -23.5)
 rotation = 1.5708
-scale = Vector2(3.7, 1)
+length = 74
 
 [node name="Start2" parent="Ground" unique_id=1407871144 instance=ExtResource("1_tile")]
 position = Vector2(60, 23)
-scale = Vector2(14.05, 1)
+length = 281
 
 [node name="Descent" parent="Ground" unique_id=113694312 instance=ExtResource("1_tile")]
 position = Vector2(336.7266, 70.9491)
 rotation = 0.3335
-scale = Vector2(14.8663, 1)
+length = 297.326
 
 [node name="Bumps" parent="Ground" unique_id=165555737 instance=ExtResource("1_tile")]
 position = Vector2(620, 120)
-scale = Vector2(14.05, 1)
+length = 281
 
 [node name="Kicker" parent="Ground" unique_id=1773673106 instance=ExtResource("1_tile")]
 position = Vector2(823.8462, 94.2308)
 rotation = -0.3948
-scale = Vector2(6.55, 1)
+length = 131
 
 [node name="PitLeftWall" parent="Ground" unique_id=1160797845 instance=ExtResource("1_tile")]
 position = Vector2(870, 145)
 rotation = 1.5708
-scale = Vector2(7.55, 1)
+length = 151
 
 [node name="PitFloor" parent="Ground" unique_id=212142728 instance=ExtResource("1_tile")]
 position = Vector2(920, 230)
-scale = Vector2(4.05, 1)
+length = 81
 
 [node name="PitRightWall" parent="Ground" unique_id=795310972 instance=ExtResource("1_tile")]
 position = Vector2(970, 160)
 rotation = -1.5708
-scale = Vector2(6.05, 1)
+length = 121
 
 [node name="Landing" parent="Ground" unique_id=1261527726 instance=ExtResource("1_tile")]
 position = Vector2(1057.1265, 139.5783)
 rotation = 0.2915
-scale = Vector2(10.4903, 1)
+length = 209.806
 
 [node name="BigBallStraight" parent="Ground" unique_id=134551738 instance=ExtResource("1_tile")]
 position = Vector2(1330, 170)
-scale = Vector2(17.05, 1)
+length = 341
 
 [node name="Climb1" parent="Ground" unique_id=1963574602 instance=ExtResource("1_tile")]
 position = Vector2(1603.7139, 129.2848)
 rotation = -0.3805
-scale = Vector2(10.8203, 1)
+length = 216.406
 
 [node name="Climb2" parent="Ground" unique_id=1099709946 instance=ExtResource("1_tile")]
 position = Vector2(1750, 90)
-scale = Vector2(5.05, 1)
+length = 101
 
 [node name="Finish1" parent="Ground" unique_id=471060838 instance=ExtResource("1_tile")]
 position = Vector2(2132.5, 190)
-scale = Vector2(16.8, 1)
+length = 336
 
 [node name="Finish2" parent="Ground" unique_id=90521324 instance=ExtResource("1_tile")]
 position = Vector2(2310, 140)
 rotation = -1.5708
-scale = Vector2(4.05, 1)
+length = 81
 
 [node name="Balls" type="Node2D" parent="." unique_id=194570285]
 

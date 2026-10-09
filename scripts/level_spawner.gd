@@ -7,8 +7,8 @@ const FINISH_SCENE := preload("res://scenes/finish.tscn")
 const BOOST_SCENE := preload("res://scenes/map/boost.tscn")
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
 
-## Size of floortile.tscn at scale 1. Tiles are stretched along x to their length.
-const TILE_SIZE := 20.0
+## Height of floortile.tscn. Tiles are made as long as their length, not scaled.
+const TILE_SIZE := FloorTile.SIZE
 ## Collision radius of ball.tscn at scale 1.
 const BALL_RADIUS := 19.31
 ## Size of the square boost.tscn at scale 1.
@@ -48,7 +48,7 @@ static func spawn_boost(boost: Dictionary) -> Node2D:
 static func apply_tile(node: Node2D, tile: Dictionary) -> void:
 	node.position = tile["position"]
 	node.rotation = tile["rotation"]
-	node.scale = Vector2(tile["length"] / TILE_SIZE, 1.0)
+	(node as FloorTile).length = tile["length"]
 	_set_collision(node, tile["collision"])
 
 
