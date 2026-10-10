@@ -5,16 +5,19 @@
 [ext_resource type="PackedScene" uid="uid://rk4pcxlesv1r" path="res://scenes/map_builder_ui.tscn" id="3_ui"]
 [ext_resource type="Texture2D" uid="uid://c8dlwfrdskukc" path="res://assets/carbody.png" id="4_carbody"]
 
-[node name="LevelBuilder" type="Node2D" node_paths=PackedStringArray("ui", "camera", "objects_root", "start_marker", "overlay")]
+[node name="LevelBuilder" type="Node2D" node_paths=PackedStringArray("ui", "camera", "objects_root", "start_marker", "overlay", "background")]
 script = ExtResource("1_script")
 ui = NodePath("MapBuilderUI")
 camera = NodePath("Camera2D")
 objects_root = NodePath("Objects")
 start_marker = NodePath("StartMarker")
 overlay = NodePath("Overlay")
+background = NodePath("Background")
 
-[node name="Parallax" parent="." instance=ExtResource("2_parallax")]
-z_index = -100
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="Parallax" parent="Background" instance=ExtResource("2_parallax")]
 
 [node name="Objects" type="Node2D" parent="."]
 

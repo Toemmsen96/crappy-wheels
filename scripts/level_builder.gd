@@ -71,6 +71,8 @@ const NO_COLLISION_ALPHA := 0.4
 @export var start_marker: Node2D
 ## Draws previews above the level objects.
 @export var overlay: Node2D
+## Holds the parallax background, outside the level so zooming doesn't scale it.
+@export var background: CanvasLayer
 
 var _level: LevelData
 var _tool := MapBuilderUI.Tool.FLOOR
@@ -104,6 +106,7 @@ var _box_start := Vector2.ZERO
 var _box_kept: Array[Node2D] = []
 # Objects copied with Ctrl+C, as {"kind": Kind, "data": Dictionary}, for Ctrl+V.
 var _clipboard: Array[Dictionary] = []
+var _parallax_layers: Array[Parallax2D] = []
 
 
 func _ready() -> void:
@@ -141,6 +144,11 @@ func _ready() -> void:
 	ui.strength_changed.connect(func(strength: float) -> void:
 		_edit_settings_targets(_set_strength.bind(strength)))
 	overlay.draw.connect(_draw_overlay)
+	for node in background.find_children("*", "Parallax2D"):
+		var layer := node as Parallax2D
+		layer.ignore_camera_scroll = true # Scrolled by _update_background() instead.
+		_parallax_layers.append(layer)
+	_update_background()
 	_show_settings()
 
 
@@ -163,6 +171,7 @@ func _process(delta: float) -> void:
 		var direction := Input.get_vector(Inputs.MOVE_LEFT, Inputs.MOVE_RIGHT, Inputs.MOVE_UP, Inputs.MOVE_DOWN)
 		camera.position += direction * PAN_SPEED * delta / camera.zoom.x
 
+	_update_background()
 	queue_redraw()
 	overlay.queue_redraw()
 
@@ -213,7 +222,10 @@ func _handle_key(key: InputEventKey) -> void:
 			KEY_S:
 				_save()
 			KEY_ENTER, KEY_KP_ENTER:
+				# Changing the scene takes the builder out of the tree, leaving no viewport to handle the key after.
+				get_viewport().set_input_as_handled()
 				_test()
+				return
 			_:
 				return
 	elif TOOL_KEYS.has(key.keycode):
@@ -813,6 +825,15 @@ func _zoom_at(screen_position: Vector2, factor: float) -> void:
 	var offset := screen_position - get_viewport_rect().size / 2.0
 	camera.position += offset / old_zoom - offset / new_zoom
 	camera.zoom = Vector2.ONE * new_zoom
+
+
+## Scrolls the background as far as the level moved on screen, so it keeps its size and
+## parallax at every zoom. At zoom 1 this is what the camera would do to it.
+func _update_background() -> void:
+	var screen_offset := camera.position * camera.zoom - get_viewport_rect().size / 2.0
+	background.offset = -screen_offset
+	for layer in _parallax_layers:
+		layer.screen_offset = screen_offset
 
 
 func _mark_changed() -> void:

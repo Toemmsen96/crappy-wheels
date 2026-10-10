@@ -41,8 +41,7 @@ text = "Level Builder"
 
 [node name="Button3" type="Button" parent="MarginContainer/VBoxContainer" unique_id=1931201330]
 layout_mode = 2
-disabled = true
-text = "Settings (coming soon)"
+text = "Settings"
 
 [node name="Button" type="Button" parent="MarginContainer/VBoxContainer" unique_id=811517621]
 layout_mode = 2
@@ -55,4 +54,5 @@ text = "Credits"
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Play" to="." method="_on_PlayButton_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Button2" to="." method="_on_LevelBuilderButton_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Button" to="." method="_on_LeaderboardsButton_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Button3" to="." method="_on_SettingsButton_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Credits" to="." method="_on_CreditsButton_pressed"]

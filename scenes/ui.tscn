@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d4k22chkbkdl3" path="res://scenes/ui/ui.gd" id="1_nt7q6"]
 
-[node name="HUD" type="Control" unique_id=219391505 node_paths=PackedStringArray("time_label")]
+[node name="HUD" type="Control" unique_id=219391505 node_paths=PackedStringArray("time_label", "controls_box", "controls_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,6 +12,8 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_nt7q6")
 time_label = NodePath("MarginContainer/HBoxContainer2/MarginContainer2/VBX/elapsed")
+controls_box = NodePath("MarginContainer/HBoxContainer2/MarginContainer")
+controls_label = NodePath("MarginContainer/HBoxContainer2/MarginContainer/VBX2/Controls")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1736851056]
 layout_mode = 1

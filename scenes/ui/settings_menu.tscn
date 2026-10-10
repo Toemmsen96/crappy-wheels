@@ -1,0 +1,119 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/settings_menu.gd" id="1_settings"]
+
+[node name="SettingsMenu" type="CanvasLayer" node_paths=PackedStringArray("controls_grid", "reset_button", "show_controls_check", "status_label", "back_button")]
+script = ExtResource("1_settings")
+controls_grid = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/ControlsPanel/Margin/Content/Grid")
+reset_button = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/ControlsPanel/Margin/Content/ResetButton")
+show_controls_check = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/DisplayPanel/Margin/Content/ShowControlsCheck")
+status_label = NodePath("MarginContainer/VBoxContainer/StatusLabel")
+back_button = NodePath("MarginContainer/VBoxContainer/BackButton")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.08612115, 0.35106915, 0.5519592, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 83
+text = "Settings"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="Sections" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="ControlsHeader" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Controls"
+
+[node name="ControlsPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/ControlsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/ControlsPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Hint" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/ControlsPanel/Margin/Content"]
+layout_mode = 2
+theme_override_constants/outline_size = 0
+text = "Click a key to change it, then press the new key. Right-click a key to remove it."
+autowrap_mode = 3
+
+[node name="Grid" type="GridContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/ControlsPanel/Margin/Content"]
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 8
+columns = 3
+
+[node name="ResetButton" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/ControlsPanel/Margin/Content"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Reset to defaults"
+
+[node name="DisplayHeader" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Display"
+
+[node name="DisplayPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/DisplayPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/DisplayPanel/Margin"]
+layout_mode = 2
+
+[node name="ShowControlsCheck" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/DisplayPanel/Margin/Content"]
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "The list of controls while driving, and the hints at the bottom of the level builder."
+button_pressed = true
+text = "Show controls on screen"
+
+[node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Back"

@@ -25,7 +25,9 @@ const TOOL_HINTS := {
 	Tool.FINISH: "Finish: click to move the finish flag.",
 	Tool.ERASE: "Erase: click a floor, ball or boost to remove it.",
 }
-const CONTROLS_HINT := "1-7 pick a tool, G toggles snapping, Shift-click or Shift-drag selects from any tool. Q/E rotate, R/F resize, C toggles collision. Ctrl+C/Ctrl+V copy and paste at the mouse, Ctrl+D duplicates, Ctrl+Z undoes. Ctrl+S saves, Ctrl+Enter tests. Right-drag or WASD/arrows to pan, mouse wheel to zoom, Home goes back to the start. Esc pauses a test run."
+## Filled in with the keys that pan, which are the driving keys, and the key that pauses.
+const CONTROLS_HINT := "1-7 pick a tool, G toggles snapping, Shift-click or Shift-drag selects from any tool. Q/E rotate, R/F resize, C toggles collision. Ctrl+C/Ctrl+V copy and paste at the mouse, Ctrl+D duplicates, Ctrl+Z undoes. Ctrl+S saves, Ctrl+Enter tests. Right-drag or %s to pan, mouse wheel to zoom, Home goes back to the start. %s pauses a test run."
+const PAN_ACTIONS := [Inputs.MOVE_UP, Inputs.MOVE_LEFT, Inputs.MOVE_DOWN, Inputs.MOVE_RIGHT]
 const SAVE_AND_LEAVE_ACTION := "save_and_leave"
 
 @export var select_button: Button
@@ -41,6 +43,7 @@ const SAVE_AND_LEAVE_ACTION := "save_and_leave"
 @export var test_button: Button
 @export var back_button: Button
 @export var status_label: Label
+## Explains the tool and the shortcuts, unless the settings hide the controls.
 @export var hint_label: Label
 ## Asks before leaving the builder with unsaved changes.
 @export var unsaved_dialog: ConfirmationDialog
@@ -121,6 +124,7 @@ func _ready() -> void:
 	collision_check.toggled.connect(collision_toggled.emit)
 	strength_input.value_changed.connect(strength_changed.emit)
 	hide_settings()
+	hint_label.visible = Settings.show_controls
 	_show_hint(Tool.FLOOR)
 
 
@@ -189,4 +193,19 @@ func _on_unsaved_dialog_action(action: StringName) -> void:
 
 
 func _show_hint(tool: Tool) -> void:
-	hint_label.text = "%s\n%s" % [TOOL_HINTS[tool], CONTROLS_HINT]
+	var controls := CONTROLS_HINT % [_pan_keys(), Settings.describe(Inputs.CANCEL)]
+	hint_label.text = "%s\n%s" % [TOOL_HINTS[tool], controls]
+
+
+## The keys that pan, a set per key slot, like "W/A/S/D or Up/Left/Down/Right".
+func _pan_keys() -> String:
+	var sets := PackedStringArray()
+	for slot in Settings.SLOTS:
+		var names := PackedStringArray()
+		for action: String in PAN_ACTIONS:
+			var key := Settings.get_keys(action)[slot]
+			if key != KEY_NONE:
+				names.append(Settings.key_name(key))
+		if not names.is_empty():
+			sets.append("/".join(names))
+	return " or ".join(sets) if not sets.is_empty() else "no keys"
