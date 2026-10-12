@@ -2,10 +2,11 @@
 
 [ext_resource type="Script" path="res://scenes/ui/settings_menu.gd" id="1_settings"]
 
-[node name="SettingsMenu" type="CanvasLayer" node_paths=PackedStringArray("controls_grid", "reset_button", "show_controls_check", "status_label", "back_button")]
+[node name="SettingsMenu" type="CanvasLayer" node_paths=PackedStringArray("controls_grid", "reset_button", "volume_grid", "show_controls_check", "status_label", "back_button")]
 script = ExtResource("1_settings")
 controls_grid = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/ControlsPanel/Margin/Content/Grid")
 reset_button = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/ControlsPanel/Margin/Content/ResetButton")
+volume_grid = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/SoundPanel/Margin/Grid")
 show_controls_check = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/DisplayPanel/Margin/Content/ShowControlsCheck")
 status_label = NodePath("MarginContainer/VBoxContainer/StatusLabel")
 back_button = NodePath("MarginContainer/VBoxContainer/BackButton")
@@ -84,6 +85,27 @@ columns = 3
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Reset to defaults"
+
+[node name="SoundHeader" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Sound"
+
+[node name="SoundPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/SoundPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="Grid" type="GridContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/SoundPanel/Margin"]
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 8
+columns = 3
 
 [node name="DisplayHeader" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections"]
 layout_mode = 2

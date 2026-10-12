@@ -20,6 +20,8 @@ const VISIBLE_SCORES := 4
 @export var submit_button: Button
 @export var leaderboard_status: Label
 @export var return_button: Button
+## Plays the next built-in level. Shown only after a built-in level that has one.
+@export var next_level_button: Button
 @export_group("Replay")
 @export var level_repository: LevelRepository
 @export var watch_replay_button: Button
@@ -59,6 +61,13 @@ func _ready() -> void:
 	replay_file_button.disabled = true
 	if GameState.testing_in_builder:
 		return_button.text = "Back to Level Builder"
+	elif BaseLevels.ships_with(GameState.leaderboard_id):
+		# Not _played_level(): the level scene isn't the current scene yet while it's being built.
+		var played: LevelData = null if GameState.leaderboard_id == GameState.LEVEL1_LEADERBOARD else GameState.current_level
+		var next := BaseLevels.next_after(played)
+		if next != null:
+			next_level_button.show()
+			next_level_button.pressed.connect(_play_next_level.bind(next))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -115,7 +124,11 @@ func _submit_time() -> void:
 	_is_best_time = int(answer["best_time_ms"]) == _time_ms
 	if answer.get("replay") is String:
 		_is_uploaded = true
-		_show_replay_status("Your replay is online: everyone can watch it from the leaderboard.")
+		# The server pushes replays together every few minutes.
+		if answer.get("replay_pending") == true:
+			_show_replay_status("Your replay goes online within a few minutes: everyone can watch it from the leaderboard then.")
+		else:
+			_show_replay_status("Your replay is online: everyone can watch it from the leaderboard.")
 	elif answer.get("improved") == true:
 		var error: Variant = answer.get("replay_error")
 		_show_replay_status("Your time counts, but its replay couldn't go online: %s"
@@ -171,7 +184,10 @@ func _upload_replay() -> void:
 	_is_uploaded = true
 	_update_upload_button()
 	upload_replay_button.hide()
-	_show_replay_status("Replay uploaded! Everyone can watch it from the leaderboard now.")
+	if answer.get("pending") == true:
+		_show_replay_status("Replay uploaded! It goes on the leaderboard within a few minutes.")
+	else:
+		_show_replay_status("Replay uploaded! Everyone can watch it from the leaderboard now.")
 	_load_scores()
 
 
@@ -191,7 +207,7 @@ func _watch_leaderboard_replay(replay_path: String) -> void:
 	GameState.watch_replay(replay, _played_level(), get_tree().current_scene.scene_file_path)
 
 
-## The builder level being played, or null for Level 1, which is a scene of its own.
+## The LevelData level being played, or null for Level 1, which is a scene of its own.
 func _played_level() -> LevelData:
 	if get_tree().current_scene.scene_file_path == ScenePaths.CUSTOM_LEVEL:
 		return GameState.current_level
@@ -228,6 +244,13 @@ func _on_ReturnToMenuButton_pressed() -> void:
 		get_tree().change_scene_to_file(ScenePaths.LEVEL_BUILDER)
 	else:
 		get_tree().change_scene_to_file(ScenePaths.MAIN_MENU)
+
+func _play_next_level(level: LevelData) -> void:
+	GameState.current_level = level
+	GameState.leaderboard_id = level.id
+	GameState.reset()
+	get_tree().change_scene_to_file(ScenePaths.CUSTOM_LEVEL)
+
 
 func _on_RestartButton_pressed() -> void:
 	GameState.reset()

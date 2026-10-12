@@ -14,6 +14,7 @@ config/name="CrappyWheels"
 run/main_scene="uid://br5w05nhpmv3b"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/bg_color=Color(0.1144912, 0.13806194, 0.21075785, 1)
+boot_splash/image="uid://bjmywn505fd55"
 config/icon="uid://bd7p0xfr13ydv"
 
 [autoload]
@@ -26,7 +27,7 @@ Settings="*res://scripts/settings.gd"
 [display]
 
 window/stretch/mode="canvas_items"
-window/stretch/aspect="keep_width"
+window/stretch/aspect="expand"
 
 [dotnet]
 

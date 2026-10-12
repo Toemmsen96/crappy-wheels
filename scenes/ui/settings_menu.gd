@@ -1,14 +1,21 @@
 extends CanvasLayer
-## Settings screen: rebinds the controls of the car and turns the on-screen controls on or off.
+## Settings screen: rebinds the controls of the car, sets the volumes, and turns the on-screen
+## controls on or off.
 
 ## Shown on a slot button while it waits for a key.
 const LISTENING_TEXT := "Press a key..."
 const EMPTY_SLOT_TEXT := "(none)"
 const SLOT_BUTTON_WIDTH := 200.0
+const VOLUME_SLIDER_WIDTH := 300.0
+## The sound played after a volume slider is let go, so the player hears the new volume.
+## Buses not listed play Sfx.CLICK.
+const VOLUME_PREVIEWS := {AudioBuses.ENGINE: Sfx.REV}
 
 ## Gets a row per control: its name, then a button per key slot.
 @export var controls_grid: GridContainer
 @export var reset_button: Button
+## Gets a row per volume: its name, a slider, and the volume in percent.
+@export var volume_grid: GridContainer
 @export var show_controls_check: CheckBox
 @export var status_label: Label
 @export var back_button: Button
@@ -39,6 +46,7 @@ func _ready() -> void:
 			buttons.append(button)
 		_slot_buttons[action] = buttons
 	_refresh()
+	_add_volume_rows()
 
 	show_controls_check.button_pressed = Settings.show_controls
 	show_controls_check.toggled.connect(func(pressed: bool) -> void: Settings.show_controls = pressed)
@@ -113,6 +121,36 @@ func _control_name(action: String) -> String:
 		if control["action"] == action:
 			return control["name"]
 	return action
+
+
+func _add_volume_rows() -> void:
+	for volume: Dictionary in Settings.VOLUMES:
+		var bus: StringName = volume["bus"]
+		var label := Label.new()
+		label.text = volume["name"]
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		volume_grid.add_child(label)
+		var slider := HSlider.new()
+		slider.custom_minimum_size.x = VOLUME_SLIDER_WIDTH
+		slider.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		slider.max_value = 1.0
+		slider.step = 0.05
+		slider.value = Settings.get_volume(bus)
+		volume_grid.add_child(slider)
+		var percent := Label.new()
+		percent.custom_minimum_size.x = 60.0
+		percent.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		percent.text = _percent(slider.value)
+		volume_grid.add_child(percent)
+		slider.value_changed.connect(func(value: float) -> void:
+			Settings.set_volume(bus, value)
+			percent.text = _percent(value))
+		slider.drag_ended.connect(func(_changed: bool) -> void:
+			Sfx.play(VOLUME_PREVIEWS.get(bus, Sfx.CLICK)))
+
+
+func _percent(volume: float) -> String:
+	return "%d%%" % roundi(volume * 100.0)
 
 
 func _on_reset_pressed() -> void:

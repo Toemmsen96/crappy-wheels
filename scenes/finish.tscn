@@ -9,7 +9,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kuy6b"]
 size = Vector2(83, 45.5)
 
-[node name="Finish" type="Node2D" unique_id=1487630266 node_paths=PackedStringArray("finishcollider", "time_label", "finish_ui", "backend", "leaderboard_section", "score_message", "score_scroll", "score_list", "name_edit", "submit_button", "leaderboard_status", "return_button", "level_repository", "watch_replay_button", "upload_replay_button", "replay_file_button", "replay_status")]
+[node name="Finish" type="Node2D" unique_id=1487630266 node_paths=PackedStringArray("finishcollider", "time_label", "finish_ui", "backend", "leaderboard_section", "score_message", "score_scroll", "score_list", "name_edit", "submit_button", "leaderboard_status", "return_button", "next_level_button", "level_repository", "watch_replay_button", "upload_replay_button", "replay_file_button", "replay_status")]
 script = ExtResource("1_07gpw")
 finishcollider = NodePath("Area2D")
 time_label = NodePath("CanvasLayer/Card/VBoxContainer/Time")
@@ -23,6 +23,7 @@ name_edit = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/NameRow/
 submit_button = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/NameRow/SubmitButton")
 leaderboard_status = NodePath("CanvasLayer/Card/VBoxContainer/LeaderboardSection/LeaderboardStatus")
 return_button = NodePath("CanvasLayer/Card/VBoxContainer/ActionRow/ReturnToMenu")
+next_level_button = NodePath("CanvasLayer/Card/VBoxContainer/ActionRow/NextLevel")
 level_repository = NodePath("LevelRepository")
 watch_replay_button = NodePath("CanvasLayer/Card/VBoxContainer/ReplayRow/WatchReplayButton")
 upload_replay_button = NodePath("CanvasLayer/Card/VBoxContainer/ReplayRow/UploadReplayButton")
@@ -173,6 +174,13 @@ text = "Restart Level"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Return to Menu"
+
+[node name="NextLevel" type="Button" parent="CanvasLayer/Card/VBoxContainer/ActionRow"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"AccentButton"
+text = "Next Level"
 
 [connection signal="pressed" from="CanvasLayer/Card/VBoxContainer/ActionRow/ReturnToMenu" to="." method="_on_ReturnToMenuButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/Card/VBoxContainer/ActionRow/Restart" to="." method="_on_RestartButton_pressed"]

@@ -128,10 +128,12 @@ func _ready() -> void:
 	camera.position = _level.start
 
 	ui.level_name = _level.name
+	ui.update_share_button(_level)
 	ui.tool_selected.connect(_on_tool_selected)
 	ui.level_name_changed.connect(_on_level_name_changed)
 	ui.save_pressed.connect(_save)
 	ui.test_pressed.connect(_test)
+	ui.share_pressed.connect(_share)
 	ui.back_pressed.connect(_back)
 	ui.discard_confirmed.connect(_leave)
 	ui.save_and_leave_pressed.connect(_save_and_leave)
@@ -869,6 +871,15 @@ func _save() -> bool:
 func _test() -> void:
 	GameState.testing_in_builder = true
 	get_tree().change_scene_to_file(ScenePaths.CUSTOM_LEVEL)
+
+
+## Saves the level, then asks whether to share it, so the shared level and the saved one are the same.
+func _share() -> void:
+	if ui.is_sharing():
+		ui.show_status("Wait until the upload is done.")
+		return
+	if _save():
+		ui.ask_to_share(_level)
 
 
 func _back() -> void:

@@ -1,5 +1,5 @@
 extends CanvasLayer
-## Shows the leaderboard of each level that has one: Level 1 and the downloaded levels.
+## Shows the leaderboard of each level that has one: the built-in levels and the downloaded ones.
 
 ## The most scores the backend hands out at once.
 const SCORE_LIMIT := 100
@@ -21,8 +21,12 @@ var _leaderboard_ids := PackedStringArray()
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	_add_level("Level 1", GameState.LEVEL1_LEADERBOARD)
-	for level in LevelLibrary.list_levels(LevelLibrary.DOWNLOADS_DIR):
+	for level in BaseLevels.list():
 		_add_level(level.name, level.id)
+	for level in LevelLibrary.list_levels(LevelLibrary.DOWNLOADS_DIR):
+		# Copies of Base/ downloaded by older versions: the built-in levels have those boards.
+		if not BaseLevels.is_copy(level.id):
+			_add_level(level.name, level.id)
 	# Start with the level played last, if it has a leaderboard.
 	level_picker.select(maxi(_leaderboard_ids.find(GameState.leaderboard_id), 0))
 	score_list.replay_requested.connect(_watch_replay)
@@ -69,7 +73,9 @@ func _watch_replay(replay_path: String) -> void:
 	var leaderboard_id := _leaderboard_ids[level_picker.selected]
 	var level: LevelData = null
 	if leaderboard_id != GameState.LEVEL1_LEADERBOARD:
-		level = LevelLibrary.load_level(leaderboard_id, LevelLibrary.DOWNLOADS_DIR)
+		level = BaseLevels.find(leaderboard_id)
+		if level == null:
+			level = LevelLibrary.load_level(leaderboard_id, LevelLibrary.DOWNLOADS_DIR)
 		if level == null:
 			_show_status("The level isn't downloaded anymore, so its replays can't be shown.")
 			return

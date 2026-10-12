@@ -1,6 +1,7 @@
 extends Node
-## Player settings: which keys drive the car, and whether the controls are shown on screen.
-## Kept in GameState.SETTINGS_PATH next to the player name, and applied to the InputMap on start.
+## Player settings: which keys drive the car, how loud the sounds are, and whether the controls
+## are shown on screen. Kept in GameState.SETTINGS_PATH next to the player name, and applied to
+## the InputMap and the AudioServer on start.
 
 ## Emitted after a key of a control changed, including a reset to the defaults.
 signal controls_changed
@@ -18,7 +19,14 @@ const CONTROLS := [
 ]
 ## Keys each control can have.
 const SLOTS := 2
+## The audio buses with a volume setting, in the order the settings screen lists them.
+const VOLUMES := [
+	{"bus": AudioBuses.MASTER, "name": "Master"},
+	{"bus": AudioBuses.EFFECTS, "name": "Sound effects"},
+	{"bus": AudioBuses.ENGINE, "name": "Engine"},
+]
 const CONTROLS_SECTION := "controls"
+const AUDIO_SECTION := "audio"
 const DISPLAY_SECTION := "display"
 
 var show_controls: bool:
@@ -47,6 +55,10 @@ func _ready() -> void:
 	var saved_show: Variant = settings.get_value(DISPLAY_SECTION, "show_controls", true)
 	if saved_show is bool:
 		_show_controls = saved_show
+	for volume: Dictionary in VOLUMES:
+		var saved_volume: Variant = settings.get_value(AUDIO_SECTION, volume["bus"], 1.0)
+		if saved_volume is float or saved_volume is int:
+			_apply_volume(volume["bus"], saved_volume)
 	for control: Dictionary in CONTROLS:
 		var saved: Variant = settings.get_value(CONTROLS_SECTION, control["action"], [])
 		if saved is Array and settings.has_section_key(CONTROLS_SECTION, control["action"]):
@@ -104,6 +116,18 @@ func reset_controls() -> void:
 	controls_changed.emit()
 
 
+## The volume of `bus`, from 0 (silent) to 1 (as loud as the sounds were mixed).
+func get_volume(bus: StringName) -> float:
+	var index := AudioServer.get_bus_index(bus)
+	return 0.0 if AudioServer.is_bus_mute(index) else AudioServer.get_bus_volume_linear(index)
+
+
+## Sets the volume of `bus`, from 0 (silent) to 1, and saves it.
+func set_volume(bus: StringName, volume: float) -> void:
+	_apply_volume(bus, volume)
+	_save_value(AUDIO_SECTION, bus, get_volume(bus))
+
+
 ## The keys of `action` for showing on screen, like "W / Up", or "no key".
 func describe(action: String) -> String:
 	var names := PackedStringArray()
@@ -120,6 +144,15 @@ func key_name(key: Key) -> String:
 	if OS.has_feature("pc") and not OS.has_feature("web"):
 		key = DisplayServer.keyboard_get_keycode_from_physical(key)
 	return OS.get_keycode_string(key)
+
+
+func _apply_volume(bus: StringName, volume: float) -> void:
+	var index := AudioServer.get_bus_index(bus)
+	volume = clampf(volume, 0.0, 1.0)
+	# Muted at 0, since the volume in dB would be -inf.
+	AudioServer.set_bus_mute(index, volume == 0.0)
+	if volume > 0.0:
+		AudioServer.set_bus_volume_linear(index, volume)
 
 
 func _read_keys(action: String) -> Array[Key]:

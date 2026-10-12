@@ -23,6 +23,7 @@ stream = ExtResource("3_engine")
 volume_db = -60.0
 pitch_scale = 0.8
 autoplay = true
+bus = &"Engine"
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

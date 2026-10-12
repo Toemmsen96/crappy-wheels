@@ -6,6 +6,7 @@ signal tool_selected(tool: Tool)
 signal level_name_changed(new_name: String)
 signal save_pressed
 signal test_pressed
+signal share_pressed
 signal back_pressed
 signal discard_confirmed
 signal save_and_leave_pressed
@@ -41,12 +42,15 @@ const SAVE_AND_LEAVE_ACTION := "save_and_leave"
 @export var name_edit: LineEdit
 @export var save_button: Button
 @export var test_button: Button
+## Saves the level and shares it, or updates it if it was shared before.
+@export var share_button: Button
 @export var back_button: Button
 @export var status_label: Label
 ## Explains the tool and the shortcuts, unless the settings hide the controls.
 @export var hint_label: Label
 ## Asks before leaving the builder with unsaved changes.
 @export var unsaved_dialog: ConfirmationDialog
+@export var share_dialog: ShareDialog
 @export_group("Settings")
 ## Edits the selected objects, or the next object the current tool places.
 ## Wraps onto more lines when its fields don't fit next to each other.
@@ -83,7 +87,7 @@ var level_name: String:
 ## True while a dialog is open, so the level shouldn't react to input.
 var is_dialog_open: bool:
 	get:
-		return unsaved_dialog.visible
+		return unsaved_dialog.visible or share_dialog.visible
 
 var _tool_buttons: Dictionary[Tool, Button] = {}
 
@@ -111,6 +115,9 @@ func _ready() -> void:
 		level_name_changed.emit(new_text.strip_edges()))
 	save_button.pressed.connect(save_pressed.emit)
 	test_button.pressed.connect(test_pressed.emit)
+	share_button.pressed.connect(share_pressed.emit)
+	share_dialog.status_changed.connect(show_status)
+	share_dialog.level_changed.connect(update_share_button)
 	back_button.pressed.connect(back_pressed.emit)
 	unsaved_dialog.add_button("Save and leave", true, SAVE_AND_LEAVE_ACTION)
 	unsaved_dialog.confirmed.connect(discard_confirmed.emit)
@@ -136,6 +143,22 @@ func select_tool(tool: Tool) -> void:
 
 func show_status(text: String) -> void:
 	status_label.text = text
+
+
+## Asks whether to share `level`, which should be saved already, or to update it if it was shared before.
+func ask_to_share(level: LevelData) -> void:
+	share_dialog.ask(level)
+
+
+## Whether a level is being uploaded right now.
+func is_sharing() -> bool:
+	return share_dialog.is_sharing
+
+
+## Makes the Share button say whether pressing it shares `level` or updates it.
+func update_share_button(level: LevelData) -> void:
+	share_button.text = ShareDialog.button_text(level)
+	share_button.tooltip_text = ShareDialog.button_tooltip(level)
 
 
 ## Asks whether to leave without saving. Reports the answer with discard_confirmed or save_and_leave_pressed.

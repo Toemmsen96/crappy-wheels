@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/share_dialog.gd" id="1_share"]
+[ext_resource type="Script" uid="uid://cism81ln01agx" path="res://scripts/backend_client.gd" id="2_backend"]
+
+[node name="ShareDialog" type="ConfirmationDialog" node_paths=PackedStringArray("share_label", "description_edit", "backend")]
+title = "Share level?"
+ok_button_text = "Share"
+script = ExtResource("1_share")
+share_label = NodePath("VBoxContainer/ShareLabel")
+description_edit = NodePath("VBoxContainer/DescriptionEdit")
+backend = NodePath("BackendClient")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+
+[node name="ShareLabel" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="DescriptionLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Description (optional):"
+
+[node name="DescriptionEdit" type="TextEdit" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 130)
+layout_mode = 2
+placeholder_text = "What's special about this level?"
+wrap_mode = 1
+
+[node name="BackendClient" type="Node" parent="."]
+script = ExtResource("2_backend")

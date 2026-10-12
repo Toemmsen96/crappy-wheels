@@ -1,10 +1,11 @@
 [gd_scene format=3 uid="uid://rk4pcxlesv1r"]
 
 [ext_resource type="Script" uid="uid://b6x6m1xf45xsh" path="res://scripts/map_builder_ui.gd" id="1_u1570"]
+[ext_resource type="PackedScene" path="res://scenes/ui/share_dialog.tscn" id="2_share"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_tools"]
 
-[node name="MapBuilderUI" type="CanvasLayer" unique_id=168726743 node_paths=PackedStringArray("select_button", "floor_button", "ball_button", "boost_button", "start_button", "finish_button", "erase_button", "snap_check", "name_edit", "save_button", "test_button", "back_button", "status_label", "hint_label", "unsaved_dialog", "settings_row", "settings_label", "rotation_field", "rotation_input", "size_field", "size_label", "size_input", "rotation_slider", "size_slider", "collision_check", "strength_field", "strength_input", "strength_slider")]
+[node name="MapBuilderUI" type="CanvasLayer" unique_id=168726743 node_paths=PackedStringArray("select_button", "floor_button", "ball_button", "boost_button", "start_button", "finish_button", "erase_button", "snap_check", "name_edit", "save_button", "test_button", "share_button", "back_button", "status_label", "hint_label", "unsaved_dialog", "share_dialog", "settings_row", "settings_label", "rotation_field", "rotation_input", "size_field", "size_label", "size_input", "rotation_slider", "size_slider", "collision_check", "strength_field", "strength_input", "strength_slider")]
 script = ExtResource("1_u1570")
 select_button = NodePath("TopBar/Margin/Rows/Tools/SelectButton")
 floor_button = NodePath("TopBar/Margin/Rows/Tools/FloorButton")
@@ -17,10 +18,12 @@ snap_check = NodePath("TopBar/Margin/Rows/Tools/SnapCheck")
 name_edit = NodePath("TopBar/Margin/Rows/Actions/NameEdit")
 save_button = NodePath("TopBar/Margin/Rows/Actions/SaveButton")
 test_button = NodePath("TopBar/Margin/Rows/Actions/TestButton")
+share_button = NodePath("TopBar/Margin/Rows/Actions/ShareButton")
 back_button = NodePath("TopBar/Margin/Rows/Actions/BackButton")
 status_label = NodePath("Bottom/StatusLabel")
 hint_label = NodePath("Bottom/HintLabel")
 unsaved_dialog = NodePath("UnsavedDialog")
+share_dialog = NodePath("ShareDialog")
 settings_row = NodePath("TopBar/Margin/Rows/Settings")
 settings_label = NodePath("TopBar/Margin/Rows/Settings/SettingsLabel")
 rotation_field = NodePath("TopBar/Margin/Rows/Settings/RotationField")
@@ -120,6 +123,10 @@ text = "Save"
 [node name="TestButton" type="Button" parent="TopBar/Margin/Rows/Actions" unique_id=286207709]
 layout_mode = 2
 text = "Test"
+
+[node name="ShareButton" type="Button" parent="TopBar/Margin/Rows/Actions"]
+layout_mode = 2
+text = "Share"
 
 [node name="BackButton" type="Button" parent="TopBar/Margin/Rows/Actions" unique_id=1339655497]
 layout_mode = 2
@@ -230,3 +237,5 @@ ok_button_text = "Leave without saving"
 dialog_text = "This level is not saved yet. If you leave now, all changes will be lost."
 dialog_autowrap = true
 cancel_button_text = "Keep editing"
+
+[node name="ShareDialog" parent="." instance=ExtResource("2_share")]

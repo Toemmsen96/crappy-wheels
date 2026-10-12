@@ -18,6 +18,9 @@ const WEEE := preload("res://assets/audio/weee.wav")
 ## Gain of each sound in dB. The recordings differ in loudness by up to 19 dB;
 ## these were measured to even them out without going over full scale.
 var _gain := {CLICK: 9.0, CRASH: 8.0, DONG: 5.0, FINISH: 13.0, WAHWAH: 17.0, REV: 5.0, WEEE: -2.0}
+## The sounds that play on the Engine bus with the engine loop, so its volume setting covers
+## them; the others play on the Effects bus.
+var _engine_sounds := [REV]
 ## One player per sound, each able to overlap itself.
 var _players := {}
 
@@ -29,6 +32,7 @@ func _ready() -> void:
 		var player := AudioStreamPlayer.new()
 		player.stream = stream
 		player.max_polyphony = 3
+		player.bus = AudioBuses.ENGINE if stream in _engine_sounds else AudioBuses.EFFECTS
 		add_child(player)
 		_players[stream] = player
 	# Every button clicks, including the ones scenes make in code.

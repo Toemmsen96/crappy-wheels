@@ -55,7 +55,7 @@ layout_mode = 2
 [node name="LevelPicker" type="OptionButton" parent="MarginContainer/VBoxContainer/Actions"]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Level 1 and the levels you downloaded."
+tooltip_text = "The levels that come with the game, and the ones you downloaded."
 
 [node name="RefreshButton" type="Button" parent="MarginContainer/VBoxContainer/Actions"]
 layout_mode = 2

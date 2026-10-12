@@ -24,6 +24,10 @@ const CONFIG_PATH := "res://backend.cfg"
 var last_error := ""
 ## HTTP status of the last answer, or 0 if the server wasn't reached.
 var last_status := 0
+## What the server answered to the last call if it failed, such as
+## {"error": "...", "reason": "not_owner"}, or {} if it succeeded or the
+## answer wasn't JSON.
+var last_error_answer := {}
 
 
 func _ready() -> void:
@@ -61,8 +65,9 @@ func fetch_scores(leaderboard_id: String, limit := 10, player_id := "") -> Array
 ## Returns its answer with "best_time_ms", "rank" and "improved", or {} on
 ## failure. A new best time's replay goes into the level repository, where
 ## everyone can watch it from the leaderboard: the answer then has its path as
-## "replay", or why it couldn't go there as "replay_error", in which case
-## submit_replay() can try again.
+## "replay" (with "replay_pending" true while the server waits to push it
+## together with others), or why it couldn't go there as "replay_error", in
+## which case submit_replay() can try again.
 func submit_score(leaderboard_id: String, player_id: String, player_name: String, replay: ReplayData) -> Dictionary:
 	var body := "{\"player_id\": %s, \"name\": %s, \"time_ms\": %d, \"replay\": %s}" % [
 			JSON.stringify(player_id), JSON.stringify(player_name), replay.time_ms, replay.to_json()]
@@ -79,7 +84,7 @@ func submit_score(leaderboard_id: String, player_id: String, player_name: String
 ## couldn't go online with the time. The server puts it into the level
 ## repository, where everyone can watch it from the leaderboard, and removes
 ## the player's previous replay of the level. Returns its answer with "path"
-## and "url", or {} on failure; last_status is 409 if the replay isn't of the
+## and "url" ("pending" true while the server waits to push it), or {} on failure; last_status is 409 if the replay isn't of the
 ## player's best time.
 func submit_replay(leaderboard_id: String, player_id: String, replay: ReplayData) -> Dictionary:
 	var body := "{\"player_id\": %s, \"replay\": %s}" % [JSON.stringify(player_id), replay.to_json()]
@@ -88,10 +93,19 @@ func submit_replay(leaderboard_id: String, player_id: String, replay: ReplayData
 
 
 ## Shares a level with everyone: the server adds it to the Community folder of
-## the level repository. Returns its answer with "id", "path" and "url", or {}
-## on failure. last_status is 409 if a level with this id was shared before.
-func share_level(level: LevelData) -> Dictionary:
-	var answer: Variant = await _request(HTTPClient.METHOD_POST, "/v1/levels", level.to_json(), SHARE_TIMEOUT_SECONDS)
+## the level repository and remembers player_id as the one who shared it.
+## With update, a level the same player shared before is replaced, and its
+## leaderboard and replays are deleted. Returns its answer with "id", "path",
+## "url" and "updated", or {} on failure. Refusals the game tells apart have
+## a "reason" in last_error_answer:
+## - "already_shared" (409): this player shared it before, and update wasn't set.
+## - "not_owner" (403): shared by another player.
+## - "no_owner" (409): shared before levels could be updated; nobody can.
+## - "removed" (410): taken out of the level repository.
+func share_level(level: LevelData, player_id: String, update := false) -> Dictionary:
+	var body := "{\"player_id\": %s, \"update\": %s, \"level\": %s}" % [
+			JSON.stringify(player_id), JSON.stringify(update), level.to_json()]
+	var answer: Variant = await _request(HTTPClient.METHOD_POST, "/v1/levels", body, SHARE_TIMEOUT_SECONDS)
 	return answer if answer != null else {}
 
 
@@ -110,6 +124,7 @@ static func format_time(time_ms: float) -> String:
 func _request(method: HTTPClient.Method, path: String, body := "", timeout := TIMEOUT_SECONDS) -> Variant:
 	last_error = ""
 	last_status = 0
+	last_error_answer = {}
 	if base_url.is_empty():
 		last_error = "This copy of the game has no server set up."
 		return null
@@ -136,6 +151,8 @@ func _request(method: HTTPClient.Method, path: String, body := "", timeout := TI
 	var json: Variant = JSON.parse_string(response[3].get_string_from_utf8())
 	if last_status < 200 or last_status >= 300:
 		# The server explains its errors as {"error": "..."}.
+		if json is Dictionary:
+			last_error_answer = json
 		if json is Dictionary and json.get("error") is String and not json["error"].is_empty():
 			last_error = as_sentence(json["error"])
 		else:

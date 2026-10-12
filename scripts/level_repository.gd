@@ -8,7 +8,8 @@ extends Node
 ## can run at once, so read last_error right after the `await`, before awaiting
 ## anything else.
 
-const FOLDERS: Array[String] = ["Base", "Community"]
+## Base/ isn't listed: the game comes with those levels, and they have their own leaderboards.
+const FOLDERS: Array[String] = ["Community"]
 ## Larger files are skipped. Levels at LevelData.MAX_OBJECTS are around 200 KB.
 const MAX_LEVEL_BYTES := 1024 * 1024
 ## The file tree lists every file in the repository, so it gets more room.
