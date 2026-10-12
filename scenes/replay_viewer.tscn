@@ -24,6 +24,7 @@ volume_db = -60.0
 pitch_scale = 0.8
 autoplay = true
 bus = &"Engine"
+playback_type = 1
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

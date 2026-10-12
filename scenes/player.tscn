@@ -123,6 +123,7 @@ volume_db = -8.0
 pitch_scale = 0.8
 autoplay = true
 bus = &"Engine"
+playback_type = 1
 
 [node name="ReplayRecorder" type="Node" parent="." node_paths=PackedStringArray("car", "front_wheel", "rear_wheel")]
 script = ExtResource("7_recorder")
