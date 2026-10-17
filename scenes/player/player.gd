@@ -21,6 +21,9 @@ const BOOST_PER_SECOND := 900.0
 ## Loops while the level runs, faster and higher the faster the car goes.
 @export var engine_sound: AudioStreamPlayer
 
+## Shoots flames while the boost key is held.
+@export var exhaust: Exhaust
+
 ## Car speed in px/s at which the engine sound reaches ENGINE_TOP_PITCH. Full
 ## throttle on flat ground gets the car to about this; boosts go beyond it.
 const ENGINE_TOP_SPEED := 400.0
@@ -113,8 +116,11 @@ func _on_move_down_just_pressed() -> void: _down_held = true
 func _on_move_down_released() -> void: _down_held = false
 func _on_boost_just_pressed() -> void:
 	_boost_held = true
+	exhaust.toggle_flames(true)
 	Sfx.play(Sfx.WEEE)
-func _on_boost_released() -> void: _boost_held = false
+func _on_boost_released() -> void:
+	_boost_held = false
+	exhaust.toggle_flames(false)
 
 
 ## The controls held right now, as ReplayData's control bits.

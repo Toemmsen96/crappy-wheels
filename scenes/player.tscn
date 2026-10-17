@@ -15,12 +15,13 @@
 radius = 9.0
 height = 40.0
 
-[node name="Player" type="RigidBody2D" unique_id=776938472 node_paths=PackedStringArray("wheel_front", "wheel_back", "engine_sound")]
+[node name="Player" type="RigidBody2D" unique_id=776938472 node_paths=PackedStringArray("wheel_front", "wheel_back", "engine_sound", "exhaust")]
 collision_layer = 2
 script = ExtResource("1_3vyb7")
 wheel_front = NodePath("GrooveFront/WheelFront")
 wheel_back = NodePath("GrooveRear/WheelRear")
 engine_sound = NodePath("Engine")
+exhaust = NodePath("Exhaust")
 
 [node name="GrooveFront" type="GrooveJoint2D" parent="." unique_id=1934520611]
 position = Vector2(10, 4)
