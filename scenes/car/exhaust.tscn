@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://dinkqgb3sesy8"]
+
+[ext_resource type="Texture2D" uid="uid://cl7ivv06gux5b" path="res://assets/exhaust.png" id="1_n4feb"]
+[ext_resource type="Texture2D" uid="uid://vihtmlwuixyy" path="res://assets/car/smoke.png" id="2_emsel"]
+[ext_resource type="Script" uid="uid://bk2prvrpmbqmw" path="res://scenes/car/exhaust.gd" id="2_ktkam"]
+[ext_resource type="Texture2D" uid="uid://gn8s8kchccgp" path="res://assets/car/flame1.png" id="3_mktj6"]
+[ext_resource type="Texture2D" uid="uid://tyonob11dswu" path="res://assets/car/flame2.png" id="4_ktkam"]
+
+[sub_resource type="Gradient" id="Gradient_fade"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kuy6b"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_mktj6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_ktkam")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Exhaust" type="TextureRect" unique_id=2095199914 node_paths=PackedStringArray("flames")]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.26268727, 0.26268727)
+texture = ExtResource("1_n4feb")
+expand_mode = 2
+script = ExtResource("2_ktkam")
+flames = NodePath("AnimatedSprite2D")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1657971854]
+position = Vector2(15.227232, 22.840847)
+amount = 16
+texture = ExtResource("2_emsel")
+lifetime = 2.97
+randomness = 0.45
+emission_shape = 1
+emission_sphere_radius = 2.27
+direction = Vector2(-1, 0)
+spread = 20.05
+gravity = Vector2(0, -12)
+initial_velocity_max = 39.6
+angular_velocity_min = -156.83
+angular_velocity_max = 213.86
+scale_amount_min = 0.02
+scale_amount_max = 0.02
+color_ramp = SubResource("Gradient_fade")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=123118692]
+position = Vector2(-3.806808, 19.034042)
+scale = Vector2(0.155656, 0.119158976)
+sprite_frames = SubResource("SpriteFrames_kuy6b")
+frame_progress = 0.7986297

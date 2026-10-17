@@ -1,12 +1,13 @@
 [gd_scene format=3 uid="uid://do1e4ur38dax6"]
 
 [ext_resource type="Script" uid="uid://r26cyvaur4ro" path="res://scenes/player/player.gd" id="1_3vyb7"]
-[ext_resource type="Texture2D" uid="uid://c8dlwfrdskukc" path="res://assets/carbody.png" id="2_g2els"]
+[ext_resource type="Texture2D" uid="uid://bh0nk838qpi1h" path="res://assets/carbody2.png" id="3_fjrip"]
 [ext_resource type="Texture2D" uid="uid://cflpq3daw5joa" path="res://assets/wheel.png" id="3_qhqgy"]
 [ext_resource type="PackedScene" uid="uid://66dumd072w4u" path="res://scenes/ui.tscn" id="4_dqkch"]
+[ext_resource type="PackedScene" uid="uid://dinkqgb3sesy8" path="res://scenes/car/exhaust.tscn" id="4_smehm"]
 [ext_resource type="PackedScene" uid="uid://c4vlhc3pqkb8d" path="res://scenes/ui/pause_menu.tscn" id="5_qlg0r"]
 [ext_resource type="AudioStream" uid="uid://bo31d24gpdou8" path="res://assets/audio/wroo_loop.wav" id="6_engine"]
-[ext_resource type="Script" path="res://scripts/replay_recorder.gd" id="7_recorder"]
+[ext_resource type="Script" uid="uid://cuqdjqv8vp4vp" path="res://scripts/replay_recorder.gd" id="7_recorder"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kuy6b"]
 
@@ -14,28 +15,29 @@
 radius = 9.0
 height = 40.0
 
-[node name="Player" type="RigidBody2D" unique_id=776938472 node_paths=PackedStringArray("pin_joint_front", "pin_joint_back", "engine_sound")]
+[node name="Player" type="RigidBody2D" unique_id=776938472 node_paths=PackedStringArray("wheel_front", "wheel_back", "engine_sound")]
 collision_layer = 2
 script = ExtResource("1_3vyb7")
-pin_joint_front = NodePath("PinJointFront")
-pin_joint_back = NodePath("PinJointRear")
+wheel_front = NodePath("GrooveFront/WheelFront")
+wheel_back = NodePath("GrooveRear/WheelRear")
 engine_sound = NodePath("Engine")
 
-[node name="PinJointFront" type="PinJoint2D" parent="." unique_id=1085512275]
-position = Vector2(10, 7)
+[node name="GrooveFront" type="GrooveJoint2D" parent="." unique_id=1934520611]
+position = Vector2(10, 4)
 node_a = NodePath("..")
 node_b = NodePath("WheelFront")
-disable_collision = false
-softness = 1.05
+length = 8.0
+initial_offset = 4.0
 
-[node name="WheelFront" type="RigidBody2D" parent="PinJointFront" unique_id=682750147]
+[node name="WheelFront" type="RigidBody2D" parent="GrooveFront" unique_id=682750147]
+position = Vector2(0, 4)
 collision_layer = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PinJointFront/WheelFront" unique_id=361326349]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GrooveFront/WheelFront" unique_id=361326349]
 scale = Vector2(0.49046752, 0.49046752)
 shape = SubResource("CircleShape2D_kuy6b")
 
-[node name="TextureRect" type="TextureRect" parent="PinJointFront/WheelFront" unique_id=1379545954]
+[node name="TextureRect" type="TextureRect" parent="GrooveFront/WheelFront" unique_id=1379545954]
 offset_left = -6.0
 offset_top = -6.0
 offset_right = 34.0
@@ -46,21 +48,30 @@ texture = ExtResource("3_qhqgy")
 expand_mode = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="PinJointRear" type="PinJoint2D" parent="." unique_id=1527653442]
-position = Vector2(-9, 7)
+[node name="SpringFront" type="DampedSpringJoint2D" parent="." unique_id=1934520612]
+position = Vector2(10, -4)
+node_a = NodePath("..")
+node_b = NodePath("../GrooveFront/WheelFront")
+length = 12.0
+rest_length = 13.6
+stiffness = 300.0
+
+[node name="GrooveRear" type="GrooveJoint2D" parent="." unique_id=1934520613]
+position = Vector2(-9, 4)
 node_a = NodePath("..")
 node_b = NodePath("WheelRear")
-disable_collision = false
-softness = 1.02
+length = 8.0
+initial_offset = 4.0
 
-[node name="WheelRear" type="RigidBody2D" parent="PinJointRear" unique_id=1485784670]
+[node name="WheelRear" type="RigidBody2D" parent="GrooveRear" unique_id=1485784670]
+position = Vector2(0, 4)
 collision_layer = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PinJointRear/WheelRear" unique_id=485667044]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GrooveRear/WheelRear" unique_id=485667044]
 scale = Vector2(0.49046752, 0.49046752)
 shape = SubResource("CircleShape2D_kuy6b")
 
-[node name="TextureRect" type="TextureRect" parent="PinJointRear/WheelRear" unique_id=1567245012]
+[node name="TextureRect" type="TextureRect" parent="GrooveRear/WheelRear" unique_id=1567245012]
 offset_left = -6.0
 offset_top = -6.0
 offset_right = 34.0
@@ -70,6 +81,14 @@ mouse_filter = 2
 texture = ExtResource("3_qhqgy")
 expand_mode = 2
 metadata/_edit_use_anchors_ = true
+
+[node name="SpringRear" type="DampedSpringJoint2D" parent="." unique_id=1934520614]
+position = Vector2(-9, -4)
+node_a = NodePath("..")
+node_b = NodePath("../GrooveRear/WheelRear")
+length = 12.0
+rest_length = 13.6
+stiffness = 300.0
 
 [node name="Carbody" type="CollisionShape2D" parent="." unique_id=852779902]
 rotation = 1.5707964
@@ -94,7 +113,13 @@ color = Color(0.0885599, 0.0885599, 0.0885599, 1)
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1267104995]
 zoom = Vector2(2, 2)
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=49102108]
+[node name="Exhaust" parent="." unique_id=2095199914 instance=ExtResource("4_smehm")]
+offset_left = -23.999998
+offset_top = 1.9999998
+offset_right = 16.000002
+offset_bottom = 42.0
+
+[node name="CarBodyTex" type="TextureRect" parent="." unique_id=49102108]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -107,7 +132,7 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("2_g2els")
+texture = ExtResource("3_fjrip")
 expand_mode = 2
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1736938699]
@@ -117,7 +142,7 @@ expand_mode = 2
 [node name="PauseMenu" parent="CanvasLayer" unique_id=232731440 instance=ExtResource("5_qlg0r")]
 visible = false
 
-[node name="Engine" type="AudioStreamPlayer" parent="."]
+[node name="Engine" type="AudioStreamPlayer" parent="." unique_id=808244079]
 stream = ExtResource("6_engine")
 volume_db = -8.0
 pitch_scale = 0.8
@@ -125,8 +150,8 @@ autoplay = true
 bus = &"Engine"
 playback_type = 1
 
-[node name="ReplayRecorder" type="Node" parent="." node_paths=PackedStringArray("car", "front_wheel", "rear_wheel")]
+[node name="ReplayRecorder" type="Node" parent="." unique_id=852808681 node_paths=PackedStringArray("car", "front_wheel", "rear_wheel")]
 script = ExtResource("7_recorder")
 car = NodePath("..")
-front_wheel = NodePath("../PinJointFront/WheelFront")
-rear_wheel = NodePath("../PinJointRear/WheelRear")
+front_wheel = NodePath("../GrooveFront/WheelFront")
+rear_wheel = NodePath("../GrooveRear/WheelRear")

@@ -8,6 +8,13 @@ extends Control
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	controls_box.visible = Settings.show_controls
+	# The settings can change from the pause menu during the level.
+	Settings.show_controls_changed.connect(controls_box.set_visible)
+	Settings.controls_changed.connect(_list_controls)
+	_list_controls()
+
+
+func _list_controls() -> void:
 	var lines := PackedStringArray(["Controls:"])
 	for control: Dictionary in Settings.CONTROLS:
 		lines.append("%s - %s" % [Settings.describe(control["action"]), control["name"]])

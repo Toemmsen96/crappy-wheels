@@ -1,10 +1,13 @@
 class_name Player
 extends RigidBody2D
 
-const SPEED_MULTIPLIER := 15.0
+## Push of the boost key per second it's held, shared by the body and wheels.
+const BOOST_PER_SECOND := 900.0
 
-@export var pin_joint_front: PinJoint2D
-@export var pin_joint_back: PinJoint2D
+## The wheels, each on a groove joint that lets it move up and down and a spring
+## that holds it down.
+@export var wheel_front: RigidBody2D
+@export var wheel_back: RigidBody2D
 
 ## Torque applied to each wheel while accelerating or reversing.
 @export var wheel_torque := 2500.0
@@ -37,6 +40,10 @@ const ROOF_IMPACT := 100.0
 const LOUDEST_IMPACT := 600.0
 ## Shortest gap between two of those sounds, so one landing makes one sound.
 const IMPACT_SOUND_GAP_MSEC := 300
+## How far a wheel can get from its place on the car before it's put back. The
+## suspension keeps it within about 5px; only a landing hard enough to push the
+## wheel through the floor gets it further, and it would stay stuck there.
+const WHEEL_LOST_DISTANCE := 16.0
 
 var _wheel_front: RigidBody2D
 var _wheel_back: RigidBody2D
@@ -44,6 +51,8 @@ var _wheel_back: RigidBody2D
 var _initial_transform: Transform2D
 var _initial_wheel_front_transform: Transform2D
 var _initial_wheel_back_transform: Transform2D
+## Each wheel's place relative to the car, from the scene.
+var _wheel_rest_positions: Array[Vector2] = []
 
 # Held state of each control, updated from InputHandler signals.
 var _right_held := false
@@ -58,8 +67,16 @@ var _last_impact_sound_msec := -IMPACT_SOUND_GAP_MSEC
 
 
 func _ready() -> void:
-	_wheel_front = pin_joint_front.get_node(pin_joint_front.node_b)
-	_wheel_back = pin_joint_back.get_node(pin_joint_back.node_b)
+	_wheel_front = wheel_front
+	_wheel_back = wheel_back
+	# Draw the wheels where the physics puts them. As children of the body they'd
+	# otherwise be shifted by however far the body moved in the step whenever the
+	# physics server updates them before it, as it does after the car wakes up.
+	for wheel: RigidBody2D in [_wheel_front, _wheel_back]:
+		_wheel_rest_positions.append(to_local(wheel.global_position))
+		var wheel_transform := wheel.global_transform
+		wheel.top_level = true
+		wheel.global_transform = wheel_transform
 	_initial_transform = global_transform
 	_initial_wheel_front_transform = _wheel_front.global_transform
 	_initial_wheel_back_transform = _wheel_back.global_transform
@@ -118,14 +135,15 @@ func _process(delta: float) -> void:
 	engine_sound.volume_db = lerpf(engine_sound.volume_db, volume, weight)
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	_velocity_before_step = linear_velocity
 	var torque := wheel_torque
 	var top_wheel_speed := max_wheel_speed
+	_put_back_lost_wheels()
 
 	# Handle Boost.
 	if _boost_held:
-		push(Vector2.RIGHT * SPEED_MULTIPLIER)
+		push(Vector2.RIGHT * BOOST_PER_SECOND * delta)
 
 	# Up accelerates forward, down brakes and then reverses.
 	# Positive angular velocity is clockwise, which rolls the car to the right.
@@ -147,6 +165,16 @@ func push(impulse: Vector2) -> void:
 	var total_mass := mass + _wheel_front.mass + _wheel_back.mass
 	for body: RigidBody2D in [self, _wheel_front, _wheel_back]:
 		body.apply_central_impulse(impulse * body.mass / total_mass)
+
+
+## Puts a wheel that got pushed through the floor back in its place.
+func _put_back_lost_wheels() -> void:
+	for i in 2:
+		var wheel: RigidBody2D = [_wheel_front, _wheel_back][i]
+		var rest_position := to_global(_wheel_rest_positions[i])
+		if wheel.global_position.distance_to(rest_position) > WHEEL_LOST_DISTANCE:
+			wheel.global_position = rest_position
+			wheel.linear_velocity = linear_velocity
 
 
 static func _drive_wheel(wheel: RigidBody2D, throttle: float, torque: float, top_wheel_speed: float) -> void:

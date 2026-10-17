@@ -2,12 +2,13 @@
 
 [ext_resource type="Script" path="res://scenes/ui/settings_menu.gd" id="1_settings"]
 
-[node name="SettingsMenu" type="CanvasLayer" node_paths=PackedStringArray("controls_grid", "reset_button", "volume_grid", "show_controls_check", "status_label", "back_button")]
+[node name="SettingsMenu" type="CanvasLayer" node_paths=PackedStringArray("controls_grid", "reset_button", "volume_grid", "show_controls_check", "particles_check", "status_label", "back_button")]
 script = ExtResource("1_settings")
 controls_grid = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/ControlsPanel/Margin/Content/Grid")
 reset_button = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/ControlsPanel/Margin/Content/ResetButton")
 volume_grid = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/SoundPanel/Margin/Grid")
 show_controls_check = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/DisplayPanel/Margin/Content/ShowControlsCheck")
+particles_check = NodePath("MarginContainer/VBoxContainer/ScrollContainer/Sections/DisplayPanel/Margin/Content/ParticlesCheck")
 status_label = NodePath("MarginContainer/VBoxContainer/StatusLabel")
 back_button = NodePath("MarginContainer/VBoxContainer/BackButton")
 
@@ -131,6 +132,13 @@ size_flags_horizontal = 0
 tooltip_text = "The list of controls while driving, and the hints at the bottom of the level builder."
 button_pressed = true
 text = "Show controls on screen"
+
+[node name="ParticlesCheck" type="CheckBox" parent="MarginContainer/VBoxContainer/ScrollContainer/Sections/DisplayPanel/Margin/Content"]
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "Effects such as the exhaust smoke. Turning them off can help on slow computers."
+button_pressed = true
+text = "Show particles"
 
 [node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2

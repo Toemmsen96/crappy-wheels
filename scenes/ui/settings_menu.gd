@@ -1,6 +1,11 @@
+class_name SettingsMenu
 extends CanvasLayer
 ## Settings screen: rebinds the controls of the car, sets the volumes, and turns the on-screen
-## controls on or off.
+## controls and the particles on or off. Opens as its own scene from the main menu, or over
+## the pause menu during a level.
+
+## Emitted when the menu was opened over a level and closes again.
+signal closed
 
 ## Shown on a slot button while it waits for a key.
 const LISTENING_TEXT := "Press a key..."
@@ -17,6 +22,7 @@ const VOLUME_PREVIEWS := {AudioBuses.ENGINE: Sfx.REV}
 ## Gets a row per volume: its name, a slider, and the volume in percent.
 @export var volume_grid: GridContainer
 @export var show_controls_check: CheckBox
+@export var particles_check: CheckBox
 @export var status_label: Label
 @export var back_button: Button
 
@@ -25,6 +31,9 @@ var _slot_buttons := {}
 # The action and slot waiting for a key, or "" when none is.
 var _listening_action := ""
 var _listening_slot := 0
+## Whether the menu is open over a paused level, so Back closes it instead of
+## going to the main menu.
+var opened_in_game := false
 
 
 func _ready() -> void:
@@ -50,6 +59,8 @@ func _ready() -> void:
 
 	show_controls_check.button_pressed = Settings.show_controls
 	show_controls_check.toggled.connect(func(pressed: bool) -> void: Settings.show_controls = pressed)
+	particles_check.button_pressed = Settings.particles
+	particles_check.toggled.connect(func(pressed: bool) -> void: Settings.particles = pressed)
 	reset_button.pressed.connect(_on_reset_pressed)
 	back_button.pressed.connect(_on_back_pressed)
 	status_label.text = ""
@@ -160,5 +171,20 @@ func _on_reset_pressed() -> void:
 	status_label.text = "The controls are back to the defaults."
 
 
+## Whether a slot is waiting for a key, so the key pressed shouldn't do anything else.
+func is_listening() -> bool:
+	return not _listening_action.is_empty()
+
+
+## Closes the menu opened over a level.
+func close() -> void:
+	_stop_listening()
+	closed.emit()
+	queue_free()
+
+
 func _on_back_pressed() -> void:
-	get_tree().change_scene_to_file(ScenePaths.MAIN_MENU)
+	if opened_in_game:
+		close()
+	else:
+		get_tree().change_scene_to_file(ScenePaths.MAIN_MENU)

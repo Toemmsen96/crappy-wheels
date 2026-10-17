@@ -1,6 +1,6 @@
 extends Node
-## Player settings: which keys drive the car, how loud the sounds are, and whether the controls
-## are shown on screen. Kept in GameState.SETTINGS_PATH next to the player name, and applied to
+## Player settings: which keys drive the car, how loud the sounds are, whether the controls
+## are shown on screen, and whether particles are. Kept in GameState.SETTINGS_PATH next to the player name, and applied to
 ## the InputMap and the AudioServer on start.
 
 ## Emitted after a key of a control changed, including a reset to the defaults.
@@ -29,6 +29,8 @@ const VOLUMES := [
 const CONTROLS_SECTION := "controls"
 const AUDIO_SECTION := "audio"
 const DISPLAY_SECTION := "display"
+## Every particle node in the tree, so turning particles off reaches them all.
+const PARTICLES_GROUP := &"particles"
 
 var show_controls: bool:
 	get:
@@ -40,7 +42,21 @@ var show_controls: bool:
 		_save_value(DISPLAY_SECTION, "show_controls", value)
 		show_controls_changed.emit(value)
 
+## Whether particles, such as the exhaust smoke, are shown. Turning them off also
+## stops simulating them.
+var particles: bool:
+	get:
+		return _particles
+	set(value):
+		if value == _particles:
+			return
+		_particles = value
+		_save_value(DISPLAY_SECTION, "particles", value)
+		for node in get_tree().get_nodes_in_group(PARTICLES_GROUP):
+			_apply_particles(node)
+
 var _show_controls := true
+var _particles := true
 
 # The keys from project.godot, as {action: Array of physical keycodes}, for reset_controls().
 var _default_keys := {}
@@ -49,6 +65,8 @@ var _default_keys := {}
 func _ready() -> void:
 	for control: Dictionary in CONTROLS:
 		_default_keys[control["action"]] = _read_keys(control["action"])
+	# Every particle node follows the setting, including the ones scenes make in code.
+	get_tree().node_added.connect(_on_node_added)
 
 	var settings := ConfigFile.new()
 	if settings.load(GameState.SETTINGS_PATH) != OK:
@@ -56,6 +74,9 @@ func _ready() -> void:
 	var saved_show: Variant = settings.get_value(DISPLAY_SECTION, "show_controls", true)
 	if saved_show is bool:
 		_show_controls = saved_show
+	var saved_particles: Variant = settings.get_value(DISPLAY_SECTION, "particles", true)
+	if saved_particles is bool:
+		_particles = saved_particles
 	for volume: Dictionary in VOLUMES:
 		var saved_volume: Variant = settings.get_value(AUDIO_SECTION, volume["bus"], 1.0)
 		if saved_volume is float or saved_volume is int:
@@ -145,6 +166,17 @@ func key_name(key: Key) -> String:
 	if OS.has_feature("pc") and not OS.has_feature("web"):
 		key = DisplayServer.keyboard_get_keycode_from_physical(key)
 	return OS.get_keycode_string(key)
+
+
+func _on_node_added(node: Node) -> void:
+	if node is CPUParticles2D or node is GPUParticles2D:
+		node.add_to_group(PARTICLES_GROUP)
+		_apply_particles(node)
+
+
+func _apply_particles(node: CanvasItem) -> void:
+	node.visible = _particles
+	node.process_mode = Node.PROCESS_MODE_INHERIT if _particles else Node.PROCESS_MODE_DISABLED
 
 
 func _apply_volume(bus: StringName, volume: float) -> void:
