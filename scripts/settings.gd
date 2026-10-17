@@ -24,6 +24,7 @@ const VOLUMES := [
 	{"bus": AudioBuses.MASTER, "name": "Master"},
 	{"bus": AudioBuses.EFFECTS, "name": "Sound effects"},
 	{"bus": AudioBuses.ENGINE, "name": "Engine"},
+	{"bus": AudioBuses.MUSIC, "name": "Music"},
 ]
 const CONTROLS_SECTION := "controls"
 const AUDIO_SECTION := "audio"

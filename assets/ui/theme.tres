@@ -18,6 +18,30 @@
 [ext_resource type="FontFile" uid="uid://dgof6wrxe2bo8" path="res://assets/fonts/GochiHand-Regular.ttf" id="16_mkrm2"]
 [ext_resource type="FontFile" uid="uid://d7y117jhi2cx" path="res://assets/fonts/PatrickHand-Regular.ttf" id="17_hvi5t"]
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_acm8m"]
+content_margin_left = 14.0
+content_margin_top = 7.0
+content_margin_right = 14.0
+content_margin_bottom = 3.0
+texture = ExtResource("1_s0eex")
+texture_margin_left = 14.0
+texture_margin_top = 14.0
+texture_margin_right = 14.0
+texture_margin_bottom = 14.0
+modulate_color = Color(1, 0.74, 0.3, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ix1fq"]
+content_margin_left = 14.0
+content_margin_top = 5.0
+content_margin_right = 14.0
+content_margin_bottom = 5.0
+texture = ExtResource("1_s0eex")
+texture_margin_left = 14.0
+texture_margin_top = 14.0
+texture_margin_right = 14.0
+texture_margin_bottom = 14.0
+modulate_color = Color(1, 0.89, 0.42, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s0eex"]
 content_margin_left = 8.0
 content_margin_top = 8.0
@@ -53,30 +77,6 @@ expand_margin_right = 3.0
 expand_margin_bottom = 3.0
 modulate_color = Color(0.4509804, 0.21568628, 0.18039216, 1)
 draw_center = false
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ix1fq"]
-content_margin_left = 14.0
-content_margin_top = 5.0
-content_margin_right = 14.0
-content_margin_bottom = 5.0
-texture = ExtResource("1_s0eex")
-texture_margin_left = 14.0
-texture_margin_top = 14.0
-texture_margin_right = 14.0
-texture_margin_bottom = 14.0
-modulate_color = Color(1, 0.89, 0.42, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_acm8m"]
-content_margin_left = 14.0
-content_margin_top = 7.0
-content_margin_right = 14.0
-content_margin_bottom = 3.0
-texture = ExtResource("1_s0eex")
-texture_margin_left = 14.0
-texture_margin_top = 14.0
-texture_margin_right = 14.0
-texture_margin_bottom = 14.0
-modulate_color = Color(1, 0.74, 0.3, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_knjjy"]
 content_margin_left = 14.0

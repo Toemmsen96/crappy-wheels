@@ -23,6 +23,7 @@ GameState="*res://scripts/game_state.gd"
 InputHandler="*res://scripts/input_handler.gd"
 Sfx="*res://scripts/sfx.gd"
 Settings="*res://scripts/settings.gd"
+Music="*res://scripts/music.gd"
 
 [display]
 

@@ -10,3 +10,7 @@
 
 .vscode/
 *.png~
+
+# Audacity project files
+*.aup3-wal
+*.aup3-shm
